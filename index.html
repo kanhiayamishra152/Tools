@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your ultimate destination for image and PDF tools. Compress, convert, resize, merge, and more with our easy-to-use online tools.">
+    <meta name="keywords" content="image tools, PDF tools, compress images, convert PDF, merge PDF, online tools">
+    <meta name="author" content="Kanhaiya Mishra">
+    <title>Image & PDF Tools - Online Tools</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Theme Variables */
+        :root {
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --header-bg: #4CAF50;
+            --nav-bg: #333;
+            --card-bg: white;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="dark"] {
+            --bg-color: #222;
+            --text-color: #f9f9f9;
+            --header-bg: #333;
+            --nav-bg: #4CAF50;
+            --card-bg: #333;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--header-bg), #45a049);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+        header span {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        /* Theme Switcher Button */
+        #theme-switcher {
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        #theme-switcher:hover {
+            background-color: #ddd;
+        }
+        /* Navigation */
+        nav {
+            background-color: var(--nav-bg);
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #4CAF50;
+        }
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        /* Tool Categories */
+        .tool-category {
+            margin-bottom: 40px;
+        }
+        .tool-category h2 {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px var(--shadow-color);
+        }
+        .tool-card span {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .tool-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        .tool-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .tool-card a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .tool-card a:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 10px var(--shadow-color);
+            transform: translateY(-2px);
+        }
+        /* Footer */
+        footer {
+            background-color: var(--nav-bg);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            nav a {
+                font-size: 1rem;
+                margin: 0 10px;
+            }
+            .tool-category h2 {
+                font-size: 1.8rem;
+            }
+            .tool-card h3 {
+                font-size: 1.3rem;
+            }
+            .tool-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            nav a {
+                font-size: 0.9rem;
+                margin: 0 8px;
+            }
+            .tool-category h2 {
+                font-size: 1.5rem;
+            }
+            .tool-card h3 {
+                font-size: 1.2rem;
+            }
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span>🛠️</span>
+        <h1>Image & PDF Tools</h1>
+        <p>Your ultimate destination for all image and PDF tools. Compress, convert, resize, merge, and more!</p>
+        <button id="theme-switcher">Switch to Dark Theme</button>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#image-tools">Image Tools</a>
+        <a href="#pdf-tools">PDF Tools</a>
+    </nav>
+    <main>
+        <div id="homepage">
+            <section id="image-tools" class="tool-category">
+                <h2>Image Tools</h2>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <span>🖼️</span>
+                        <h3>Image Compressor</h3>
+                        <p>Compress images without losing quality.</p>
+                        <a href="/Tools/img-compressor.html">Use Tool</a>
+                    </div>
+                    <div class="tool-card">
+                        <span>🔄</span>
+                        <h3>Image Converter</h3>
+                        <p>Convert images to JPG, PNG, WEBP, and more.</p>
+                        <a href="#">Use Tool</a>
+                    </div>
+                </div>
+            </section>
+            <section id="pdf-tools" class="tool-category">
+                <h2>PDF Tools</h2>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <span>📄➡️</span>
+                        <h3>PDF Compressor</h3>
+                        <p>Compress PDF files to reduce their size.</p>
+                        <a href="#">Use Tool</a>
+                    </div>
+                    <div class="tool-card">
+                        <span>📄➡️📝</span>
+                        <h3>PDF to Word</h3>
+                        <p>Convert PDF files to editable Word documents.</p>
+                        <a href="#">Use Tool</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>© 2023 Image & PDF Tools. All rights reserved. | Author: Kanhaiya Mishra</p>
+    </footer>
+    <script>
+        const themeSwitcher = document.getElementById('theme-switcher');
+        themeSwitcher.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            themeSwitcher.textContent = `Switch to ${newTheme === 'dark' ? 'Light' : 'Dark'} Theme`;
+        });
+    </script>
+</body>
+</html>
