@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Compress images online without losing quality.">
+    <meta name="keywords" content="image compressor, compress images, online tool">
+    <meta name="author" content="Kanhaiya Mishra">
+    <title>Image Compressor - Image & PDF Tools</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Theme Variables */
+        :root {
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --header-bg: #4CAF50;
+            --nav-bg: #333;
+            --card-bg: white;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="dark"] {
+            --bg-color: #222;
+            --text-color: #f9f9f9;
+            --header-bg: #333;
+            --nav-bg: #4CAF50;
+            --card-bg: #333;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--header-bg), #45a049);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+        header span {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        /* Theme Switcher Button */
+        #theme-switcher {
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        #theme-switcher:hover {
+            background-color: #ddd;
+        }
+        /* Navigation */
+        nav {
+            background-color: var(--nav-bg);
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #4CAF50;
+        }
+        /* Main Content */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        /* Compressor Tool */
+        #compressor-tool {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            margin-bottom: 20px;
+        }
+        #compressor-tool h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+        #compressor-tool form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        #compressor-tool label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        #compressor-tool input[type="file"], #compressor-tool input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        #compressor-tool input[type="file"]:focus, #compressor-tool input[type="text"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        #compressor-tool button {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        #compressor-tool button:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 10px var(--shadow-color);
+            transform: translateY(-2px);
+        }
+        #compressor-tool #output {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        #compressor-tool #compressed-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            margin-top: 15px;
+        }
+        #compressor-tool #download-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        #compressor-tool #download-link:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 10px var(--shadow-color);
+            transform: translateY(-2px);
+        }
+        #compressor-tool #user-feedback {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+        /* Footer */
+        footer {
+            background-color: var(--nav-bg);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            nav a {
+                font-size: 1rem;
+                margin: 0 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            nav a {
+                font-size: 0.9rem;
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span>🛠️</span>
+        <h1>Image Compressor</h1>
+        <p>Compress your images without losing quality.</p>
+        <button id="theme-switcher">Switch to Dark Theme</button>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#image-tools">Image Tools</a>
+        <a href="#pdf-tools">PDF Tools</a>
+    </nav>
+    <main>
+        <div id="compressor-tool">
+            <h2>Image Compressor</h2>
+            <form id="compress-form">
+                <label for="image-input">Select Image:</label>
+                <input type="file" id="image-input" accept="image/*" required>
+                <label for="compression-level">Compression Level (KB/MB):</label>
+                <input type="text" id="compression-level" placeholder="e.g., 100KB, 1MB" required>
+                <button type="submit">Compress Image</button>
+            </form>
+            <div id="output">
+                <h3>Compressed Image:</h3>
+                <img id="compressed-image" src="" alt="Compressed Image">
+                <a id="download-link" href="#" download>Download Compressed Image</a>
+            </div>
+            <div id="user-feedback"></div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2023 Image & PDF Tools. All rights reserved. | Author: Kanhaiya Mishra</p>
+    </footer>
+    <script>
+        const themeSwitcher = document.getElementById('theme-switcher');
+        themeSwitcher.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            themeSwitcher.textContent = `Switch to ${newTheme === 'dark' ? 'Light' : 'Dark'} Theme`;
+        });
+
+        document.getElementById('compress-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('image-input');
+            const compressionLevelInput = document.getElementById('compression-level').value.trim();
+            const outputImage = document.getElementById('compressed-image');
+            const downloadLink = document.getElementById('download-link');
+            const outputSection = document.getElementById('output');
+            const userFeedback = document.getElementById('user-feedback');
+
+            outputSection.style.display = 'none';
+            userFeedback.textContent = 'Compressing...';
+
+            let targetSizeKB = parseFloat(compressionLevelInput);
+            if (compressionLevelInput.toLowerCase().includes('mb')) {
+                targetSizeKB *= 1024;
+            }
+            if (fileInput.files.length === 0 || isNaN(targetSizeKB)) {
+                alert('Invalid input');
+                return;
+            }
+            const file = fileInput.files[0];
+            const img = await loadImage(file);
+            const canvas = createCanvas(img);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            let maxQualityBlob = await compressImage(canvas, 1.0);
+            let maxQualitySizeKB = maxQualityBlob.size / 1024;
+            if (maxQualitySizeKB <= targetSizeKB) {
+                const compressedImageUrl = URL.createObjectURL(maxQualityBlob);
+                outputImage.src = compressedImageUrl;
+                downloadLink.href = compressedImageUrl;
+                downloadLink.download = `compressed_${file.name}`;
+                outputSection.style.display = 'block';
+                userFeedback.textContent = `Final size: ${maxQualitySizeKB.toFixed(2)}KB (Target: ${targetSizeKB}KB)`;
+                return;
+            }
+
+            let minQualityBlob = await compressImage(canvas, 0.1);
+            let minQualitySizeKB = minQualityBlob.size / 1024;
+            if (minQualitySizeKB > targetSizeKB) {
+                userFeedback.textContent = `Cannot compress below ${minQualitySizeKB.toFixed(2)}KB. Minimum possible size is ${minQualitySizeKB.toFixed(2)}KB.`;
+                outputSection.style.display = 'block';
+                return;
+            }
+
+            let low = 0.1;
+            let high = 1.0;
+            let best_blob = null;
+            for (let i = 0; i < 20; i++) {
+                let quality = (low + high) / 2;
+                let blob = await compressImage(canvas, quality);
+                let sizeKB = blob.size / 1024;
+                if (sizeKB <= targetSizeKB) {
+                    best_blob = blob;
+                    low = quality;
+                } else {
+                    high = quality;
+                }
+            }
+
+            const compressedImageUrl = URL.createObjectURL(best_blob);
+            outputImage.src = compressedImageUrl;
+            downloadLink.href = compressedImageUrl;
+            downloadLink.download = `compressed_${file.name}`;
+            outputSection.style.display = 'block';
+            userFeedback.textContent = `Final size: ${(best_blob.size / 1024).toFixed(2)}KB (Target: ${targetSizeKB}KB)`;
+        });
+
+        function loadImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => resolve(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function createCanvas(img) {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            return canvas;
+        }
+
+        function compressImage(canvas, quality) {
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
+            });
+        }
+    </script>
+</body>
+  </html>
