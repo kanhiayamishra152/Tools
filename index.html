@@ -8,13 +8,11 @@
     <meta name="author" content="Kanhaiya Mishra">
     <title>Image & PDF Tools - Online Tools</title>
     <style>
-        /* CSS Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        /* Theme Variables */
         :root {
             --bg-color: #f9f9f9;
             --text-color: #333;
@@ -36,9 +34,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            perspective: 1000px; /* Adds 3D perspective */
+            perspective: 1000px;
         }
-        /* Header with 3D Effect */
         header {
             background: linear-gradient(135deg, var(--header-bg), #45a049);
             color: white;
@@ -76,7 +73,6 @@
         #theme-switcher:hover {
             background-color: #ddd;
         }
-        /* Navigation with 3D Effect */
         nav {
             background-color: var(--nav-bg);
             padding: 10px;
@@ -95,14 +91,12 @@
             color: #4CAF50;
             transform: translateZ(5px) scale(1.1);
         }
-        /* Main Content */
         main {
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
             transform-style: preserve-3d;
         }
-        /* Tool Categories */
         .tool-category {
             margin-bottom: 40px;
             transform: translateZ(10px);
@@ -167,7 +161,6 @@
             box-shadow: 0 12px 20px var(--shadow-color);
             transform: translateZ(10px) translateY(-5px);
         }
-        /* Footer with 3D Effect */
         footer {
             background-color: var(--nav-bg);
             color: white;
@@ -181,48 +174,37 @@
             margin: 0;
             font-size: 0.9rem;
         }
-        /* Responsive Design */
+        #visitor-stats {
+            background-color: var(--nav-bg);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            transform: translateZ(5px);
+            box-shadow: 0 -5px 15px var(--shadow-color);
+            font-size: 1rem;
+        }
+        #visitor-stats p {
+            margin: 5px 0;
+        }
+        #total-visitors, #active-users {
+            font-weight: bold;
+            color: #4CAF50;
+        }
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-            header p {
-                font-size: 1rem;
-            }
-            nav a {
-                font-size: 1rem;
-                margin: 0 10px;
-            }
-            .tool-category h2 {
-                font-size: 1.8rem;
-            }
-            .tool-card h3 {
-                font-size: 1.3rem;
-            }
-            .tool-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
+            header h1 { font-size: 2rem; }
+            header p { font-size: 1rem; }
+            nav a { font-size: 1rem; margin: 0 10px; }
+            .tool-category h2 { font-size: 1.8rem; }
+            .tool-card h3 { font-size: 1.3rem; }
+            .tool-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
         }
         @media (max-width: 480px) {
-            header h1 {
-                font-size: 1.8rem;
-            }
-            header p {
-                font-size: 0.9rem;
-            }
-            nav a {
-                font-size: 0.9rem;
-                margin: 0 8px;
-            }
-            .tool-category h2 {
-                font-size: 1.5rem;
-            }
-            .tool-card h3 {
-                font-size: 1.2rem;
-            }
-            .tool-grid {
-                grid-template-columns: 1fr;
-            }
+            header h1 { font-size: 1.8rem; }
+            header p { font-size: 0.9rem; }
+            nav a { font-size: 0.9rem; margin: 0 8px; }
+            .tool-category h2 { font-size: 1.5rem; }
+            .tool-card h3 { font-size: 1.2rem; }
+            .tool-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -247,13 +229,13 @@
                         <span>🖼️</span>
                         <h3>Image Compressor</h3>
                         <p>Compress images without losing quality.</p>
-                        <a href="/Tools/img-compressor.html">Use Tool</a>
+                        <a href="./Tools/img-compressor.html">Use Tool</a>
                     </div>
                     <div class="tool-card">
                         <span>🔄</span>
                         <h3>Image Converter</h3>
                         <p>Convert images to JPG, PNG, WEBP, and more.</p>
-                        <a href="#">Use Tool</a>
+                        <a href="./Tools/image-converter.html">Use Tool</a>
                     </div>
                 </div>
             </section>
@@ -264,19 +246,19 @@
                         <span>📝➡️📄</span>
                         <h3>Text to PDF Generator</h3>
                         <p>Convert plain text to PDF documents easily.</p>
-                        <a href="/Tools/text-to-pdf-generator.html">Use Tool</a>
+                        <a href="./Tools/text-to-pdf.html">Use Tool</a>
                     </div>
                     <div class="tool-card">
                         <span>📄➡️</span>
                         <h3>PDF Compressor</h3>
                         <p>Compress PDF files to reduce their size.</p>
-                        <a href="#">Use Tool</a>
+                        <a href="/Tools/text-to-pdf-generator.html">Use Tool</a>
                     </div>
                     <div class="tool-card">
                         <span>📄➡️📝</span>
                         <h3>PDF to Word</h3>
                         <p>Convert PDF files to editable Word documents.</p>
-                        <a href="#">Use Tool</a>
+                        <a href="./Tools/pdf-to-word.html">Use Tool</a>
                     </div>
                 </div>
             </section>
@@ -285,6 +267,10 @@
     <footer>
         <p>© 2023 Image & PDF Tools. All rights reserved. | Author: Kanhaiya Mishra</p>
     </footer>
+    <div id="visitor-stats">
+        <p>Total Visitors: <span id="total-visitors">0</span></p>
+        <p>Active Users Now: <span id="active-users">0</span></p>
+    </div>
     <script>
         const themeSwitcher = document.getElementById('theme-switcher');
         themeSwitcher.addEventListener('click', () => {
@@ -293,6 +279,17 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             themeSwitcher.textContent = `Switch to ${newTheme === 'dark' ? 'Light' : 'Dark'} Theme`;
         });
+
+        const totalVisitorsSpan = document.getElementById('total-visitors');
+        const activeUsersSpan = document.getElementById('active-users');
+        let totalVisitors = 0;
+        let activeUsers = 0;
+        setInterval(() => {
+            totalVisitors += Math.floor(Math.random() * 10);
+            activeUsers = Math.floor(Math.random() * 5);
+            totalVisitorsSpan.textContent = totalVisitors;
+            activeUsersSpan.textContent = activeUsers;
+        }, 5000);
     </script>
 </body>
 </html>
