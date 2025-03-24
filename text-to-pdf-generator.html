@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="3D PDF Editor with preview, formatted notes, and multi-theme support for students and professionals.">
+    <meta name="keywords" content="3D PDF editor, formatted notes, file handling, Python notes, PDF preview, Google AdSense, multi-theme">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="xAI">
+    <title>3D PDF Editor - Formatted Notes with Preview</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #4f46e5;
+            --background: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --secondary: #6366f1;
+            --background: #1e293b;
+            --text: #f8fafc;
+            --border: #475569;
+            --shadow: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="forest"] {
+            --primary: #2d6a4f;
+            --secondary: #1b4332;
+            --background: #f0f7f4;
+            --text: #081c15;
+            --border: #95d5b2;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="sunset"] {
+            --primary: #ff6b6b;
+            --secondary: #f94144;
+            --background: #fefae0;
+            --text: #2b2d42;
+            --border: #f4a261;
+            --shadow: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s;
+            perspective: 1000px; /* 3D effect ke liye */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px var(--shadow);
+            border-radius: 15px;
+            background: var(--background);
+            padding: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--background);
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            flex-wrap: wrap;
+            transform: translateZ(20px); /* 3D depth */
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px var(--shadow), inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+            transform: translateZ(10px);
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px) translateZ(15px);
+            box-shadow: 0 8px 20px var(--shadow), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(2px) translateZ(5px);
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .page-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            transform: translateZ(10px);
+        }
+
+        .page-tab {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--background);
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .page-tab.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            transform: translateZ(5px);
+        }
+
+        .editor-container {
+            margin-top: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--background);
+            box-shadow: 0 5px 15px var(--shadow);
+            transform: translateZ(5px);
+        }
+
+        .ql-toolbar {
+            border: none !important;
+            background: var(--background) !important;
+            border-bottom: 1px solid var(--border) !important;
+        }
+
+        .ql-container {
+            border: none !important;
+            height: 600px;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .size-control, .theme-control {
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+            background: var(--background);
+            color: var(--text);
+            box-shadow: 0 3px 10px var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .size-control:hover, .theme-control:hover {
+            transform: translateZ(5px);
+        }
+
+        .word-count {
+            padding: 8px;
+            color: var(--text);
+            font-size: 14px;
+            transform: translateZ(5px);
+        }
+
+        .ads-container {
+            margin: 20px 0;
+            text-align: center;
+            transform: translateZ(5px);
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed var(--border);
+            background: var(--background);
+            display: none;
+            box-shadow: 0 5px 15px var(--shadow);
+            transform: translateZ(5px);
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 style="display: none;">3D PDF Editor with Preview</h1>
+        </header>
+        <div class="toolbar">
+            <select class="size-control" id="pageSize">
+                <option value="595,842">A4 (210×297mm)</option>
+                <option value="612,792">Letter (8.5×11in)</option>
+                <option value="612,1008">Legal (8.5×14in)</option>
+            </select>
+            <button class="btn" id="newPage">+ New Page</button>
+            <button class="btn" id="exportPdf">Export PDF</button>
+            <button class="btn" id="previewPdf">Preview PDF</button>
+            <button class="btn" id="sampleNotes">Add Sample Notes</button>
+            <select class="theme-control" id="themeSelect">
+                <option value="light">Light Theme</option>
+                <option value="dark">Dark Theme</option>
+                <option value="forest">Forest Theme</option>
+                <option value="sunset">Sunset Theme</option>
+            </select>
+            <span class="word-count" id="wordCount">Words: 0 (Max ~500 words per A4 page)</span>
+        </div>
+
+        <div class="ads-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="page-tabs" id="pageTabs"></div>
+        
+        <div class="editor-container" id="editorContainer"></div>
+        <div class="preview-container" id="previewContainer"></div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script>
+        class PDFEditor {
+            constructor() {
+                this.editors = [];
+                this.currentPage = 0;
+                this.editorContainer = document.getElementById('editorContainer');
+                this.pageTabs = document.getElementById('pageTabs');
+                this.wordCountElement = document.getElementById('wordCount');
+                this.themeSelect = document.getElementById('themeSelect');
+                this.previewContainer = document.getElementById('previewContainer');
+                this.initEventListeners();
+                this.createNewPage();
+            }
+
+            createNewPage() {
+                const editorDiv = document.createElement('div');
+                editorDiv.className = 'editor';
+                editorDiv.style.display = 'none';
+                const editorId = `editor-${this.editors.length}`;
+                editorDiv.id = editorId;
+                this.editorContainer.appendChild(editorDiv);
+
+                const quill = new Quill(`#${editorId}`, {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'size': ['small', false, 'large', 'huge'] }],
+                            ['link', 'image'],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                this.editors.push({
+                    editor: quill,
+                    size: document.getElementById('pageSize').value.split(',').map(Number),
+                    content: quill.getContents()
+                });
+
+                quill.on('text-change', () => {
+                    this.updateWordCount();
+                });
+
+                this.updatePageTabs();
+                if (this.editors.length === 1) {
+                    this.switchPage(0);
+                }
+            }
+
+            updatePageTabs() {
+                this.pageTabs.innerHTML = this.editors.map((_, i) => 
+                    `<div class="page-tab ${i === this.currentPage ? 'active' : ''}" 
+                          data-page="${i}">Page ${i + 1}</div>`
+                ).join('');
+                
+                this.pageTabs.querySelectorAll('.page-tab').forEach(tab => {
+                    tab.addEventListener('click', () => this.switchPage(parseInt(tab.dataset.page)));
+                });
+            }
+
+            switchPage(index) {
+                this.editors[this.currentPage].content = this.editors[this.currentPage].editor.getContents();
+                this.currentPage = index;
+                
+                this.editorContainer.querySelectorAll('.editor').forEach((editor, i) => {
+                    editor.style.display = i === index ? 'block' : 'none';
+                });
+                
+                this.editors[index].editor.setContents(this.editors[index].content);
+                this.updatePageTabs();
+                this.updateWordCount();
+            }
+
+            updateWordCount() {
+                const text = this.editors[this.currentPage].editor.getText().trim();
+                const words = text.split(/\s+/).filter(word => word.length > 0).length;
+                this.wordCountElement.textContent = `Words: ${words} (Max ~500 words per A4 page)`;
+            }
+
+            parseFormattedText(text) {
+                const lines = text.split('\n');
+                const formattedLines = [];
+                
+                lines.forEach(line => {
+                    let formattedLine = line.trim();
+                    
+                    if (formattedLine.startsWith('# ')) {
+                        formattedLine = formattedLine.replace('# ', '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 16 });
+                    } else if (formattedLine.startsWith('## ')) {
+                        formattedLine = formattedLine.replace('## ', '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 14 });
+                    } else if (formattedLine.startsWith('- ')) {
+                        formattedLine = formattedLine.replace('- ', '').trim();
+                        formattedLines.push({ text: '• ' + formattedLine, size: 12 });
+                    } else if (formattedLine.includes('**')) {
+                        formattedLine = formattedLine.replace(/\*\*/g, '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 12 });
+                    } else if (formattedLine.startsWith('"python') || formattedLine.startsWith('```python')) {
+                        // Skip code block start
+                    } else if (formattedLine === '```') {
+                        // Skip code block end
+                    } else if (formattedLine.startsWith('Example:')) {
+                        formattedLines.push({ text: formattedLine, italic: true, size: 12 });
+                    } else if (formattedLine) {
+                        formattedLine = formattedLine.replace(/['"`]/g, ''); // Remove unwanted quotes or backticks
+                        formattedLines.push({ text: formattedLine, size: 12 });
+                    }
+                });
+                
+                return formattedLines;
+            }
+
+            async generatePDF(preview = false) {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+                const boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+
+                for (const page of this.editors) {
+                    const [width, height] = page.size;
+                    const pdfPage = pdfDoc.addPage([width, height]);
+                    const margin = 50;
+                    let y = height - margin;
+                    const maxWidth = width - (2 * margin);
+
+                    const formattedLines = this.parseFormattedText(page.editor.getText());
+
+                    for (const line of formattedLines) {
+                        if (y <= margin) break;
+
+                        const words = line.text.split(' ');
+                        let currentLine = '';
+
+                        for (const word of words) {
+                            const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                            const textWidth = (line.bold ? boldFont : font).widthOfTextAtSize(testLine, line.size);
+
+                            if (textWidth > maxWidth && currentLine) {
+                                pdfPage.drawText(currentLine, {
+                                    x: margin,
+                                    y: y,
+                                    size: line.size,
+                                    font: line.bold ? boldFont : font,
+                                    color: PDFLib.rgb(0, 0, 0)
+                                });
+                                y -= line.size + 4;
+                                currentLine = word;
+                            } else {
+                                currentLine = testLine;
+                            }
+                        }
+
+                        if (currentLine && y > margin) {
+                            pdfPage.drawText(currentLine, {
+                                x: margin,
+                                y: y,
+                                size: line.size,
+                                font: line.bold ? boldFont : font,
+                                color: PDFLib.rgb(0, 0, 0)
+                            });
+                            y -= line.size + 4;
+                        }
+                    }
+                }
+
+                const pdfBytes = await pdfDoc.save();
+                if (preview) {
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    this.previewContainer.innerHTML = `<iframe src="${url}" width="100%" height="500px"></iframe>`;
+                    this.previewContainer.style.display = 'block';
+                } else {
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `formatted-notes-${new Date().toISOString().split('T')[0]}.pdf`;
+                    link.click();
+                }
+            }
+
+            addSampleNotes() {
+                const sampleContent = `# CSV Files
+- CSV (Comma Separated Values) ek text file hoti hai jisme data commas se alag hota hai.
+- 'csv' module use karke isko handle karte hain.
+Example:
+\`\`\`python
+import csv
+with open("data.csv", "r") as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)
+\`\`\`
+`;
+                this.editors[this.currentPage].editor.setText(sampleContent);
+                this.updateWordCount();
+            }
+
+            initEventListeners() {
+                document.getElementById('newPage').addEventListener('click', () => this.createNewPage());
+                document.getElementById('exportPdf').addEventListener('click', () => this.generatePDF(false));
+                document.getElementById('previewPdf').addEventListener('click', () => this.generatePDF(true));
+                document.getElementById('sampleNotes').addEventListener('click', () => this.addSampleNotes());
+                this.themeSelect.addEventListener('change', (e) => {
+                    document.body.setAttribute('data-theme', e.target.value);
+                });
+                document.getElementById('pageSize').addEventListener('change', (e) => {
+                    this.editors[this.currentPage].size = e.target.value.split(',').map(Number);
+                });
+            }
+        }
+
+        const editor = new PDFEditor();
+    </script>
+</body>
+              </html>
