@@ -74,13 +74,13 @@
         .privacy-policy-summary { max-width: 1200px; margin: 20px auto; padding: 15px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 5px 15px var(--shadow-color); text-align: center; font-size: 0.85rem; color: #666; }
         .privacy-policy-summary a { color: #4CAF50; text-decoration: none; }
         .privacy-policy-summary a:hover { text-decoration: underline; }
-        #privacy-popup, #exit-ad-popup { position: fixed; top: 10px; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-start; z-index: 1000; padding: 10px; }
+        #privacy-popup { position: fixed; bottom: 10px; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; padding: 10px; }
+        #exit-ad-popup { position: fixed; top: 10px; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-start; z-index: 1000; padding: 10px; }
         .popup-content { background: white; padding: 15px; border-radius: 10px; max-width: 90%; width: 400px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); text-align: center; }
         .popup-content h2 { font-size: 1.3rem; color: #333; margin-bottom: 10px; }
         .popup-content p { font-size: 0.85rem; color: #666; margin-bottom: 15px; }
-        .popup-content button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 20px; cursor: pointer; transition: background 0.3s ease; }
+        .popup-content button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 20px; cursor: pointer; transition: background 0.3s ease; margin: 5px; }
         .popup-content button:hover { background-color: #45a049; }
-        .popup-content img { width: 100%; max-width: 250px; border-radius: 10px; margin-top: 10px; }
         .hidden { display: none; }
         @media (max-width: 768px) {
             header { padding: 30px 15px; }
@@ -117,25 +117,16 @@
             .popup-content h2 { font-size: 1rem; }
             .popup-content p { font-size: 0.75rem; }
             .popup-content button { padding: 5px 10px; font-size: 0.8rem; }
-            .popup-content img { max-width: 200px; }
         }
     </style>
 </head>
 <body>
-    <div id="privacy-popup" class="hidden">
-        <div class="popup-content">
-            <h2>Privacy Policy</h2>
-            <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
-            <button id="accept-privacy">Accept</button>
-        </div>
-    </div>
-
     <div id="exit-ad-popup" class="hidden">
         <div class="popup-content">
             <h2>Support Us!</h2>
-            <p>Before you leave, check this ad to keep our tools free.</p>
-            <a href="https://example.com" target="_blank"><img src="https://via.placeholder.com/300x100" alt="Support Ad"></a>
-            <button id="close-ad" style="margin-top: 15px;">Close</button>
+            <p>Before you leave, you can support us by viewing an ad or simply close this.</p>
+            <button id="view-ad">View Ad</button>
+            <button id="close-ad">Close</button>
         </div>
     </div>
 
@@ -215,6 +206,13 @@
         <p>Total Visitors: <span id="total-visitors">0</span></p>
         <p>Active Users Now: <span id="active-users">0</span></p>
     </div>
+    <div id="privacy-popup" class="hidden">
+        <div class="popup-content">
+            <h2>Privacy Policy</h2>
+            <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
+            <button id="accept-privacy">Accept</button>
+        </div>
+    </div>
     <script>
         // Theme Switcher
         const themeSwitcher = document.getElementById('theme-switcher');
@@ -237,7 +235,7 @@
             activeUsersSpan.textContent = activeUsers;
         }, 5000);
 
-        // Privacy Popup Logic
+        // Privacy Popup Logic (Moved to Bottom)
         const privacyPopup = document.getElementById('privacy-popup');
         const acceptPrivacyBtn = document.getElementById('accept-privacy');
         const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted');
@@ -246,35 +244,43 @@
             privacyPopup.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         } else {
-            privacyPopup.classList.add('hidden');
+            privacyPopup.style.display = 'none'; // Ensure hidden on load if accepted
             document.body.style.overflow = 'auto';
         }
 
         acceptPrivacyBtn.addEventListener('click', () => {
             localStorage.setItem('privacyAccepted', 'true');
-            privacyPopup.classList.add('hidden');
+            privacyPopup.style.display = 'none'; // Reliable hide
             document.body.style.overflow = 'auto';
         });
 
-        // Exit Intent Ad Popup Logic
+        // Exit Intent Popup Logic with Ad Option
         const exitAdPopup = document.getElementById('exit-ad-popup');
         const closeAdBtn = document.getElementById('close-ad');
-        const hasSeenExitAd = localStorage.getItem('exitAdSeen');
+        const viewAdBtn = document.getElementById('view-ad');
+        const hasSeenExitPopup = localStorage.getItem('exitPopupSeen');
 
-        if (!hasSeenExitAd) {
+        if (!hasSeenExitPopup) {
             document.addEventListener('mouseleave', (e) => {
-                if (e.clientY < 0 && !exitAdPopup.classList.contains('hidden') === false) {
-                    exitAdPopup.classList.remove('hidden');
-                    localStorage.setItem('exitAdSeen', 'true');
+                if (e.clientY < 0 && exitAdPopup.style.display !== 'block') {
+                    exitAdPopup.style.display = 'block'; // Show popup
+                    localStorage.setItem('exitPopupSeen', 'true');
                 }
             });
         } else {
-            exitAdPopup.classList.add('hidden');
+            exitAdPopup.style.display = 'none'; // Ensure hidden if already seen
         }
 
-        // Close Button Fix
+        // Close Button
         closeAdBtn.addEventListener('click', () => {
-            exitAdPopup.style.display = 'none'; // Direct display change for reliability
+            exitAdPopup.style.display = 'none'; // Reliable hide
+            document.body.style.overflow = 'auto';
+        });
+
+        // View Ad Button
+        viewAdBtn.addEventListener('click', () => {
+            window.open('https://example.com', '_blank'); // Replace with your ad URL
+            exitAdPopup.style.display = 'none'; // Hide after viewing ad
             document.body.style.overflow = 'auto';
         });
 
