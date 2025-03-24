@@ -36,19 +36,23 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            perspective: 1000px; /* Adds 3D perspective */
         }
-        /* Header */
+        /* Header with 3D Effect */
         header {
             background: linear-gradient(135deg, var(--header-bg), #45a049);
             color: white;
             padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transform: translateZ(20px);
+            position: relative;
         }
         header span {
             font-size: 4rem;
             margin-bottom: 10px;
             display: block;
+            transform: translateZ(30px);
         }
         header h1 {
             font-size: 2.5rem;
@@ -59,7 +63,6 @@
             font-size: 1.2rem;
             opacity: 0.9;
         }
-        /* Theme Switcher Button */
         #theme-switcher {
             padding: 10px 20px;
             background-color: #fff;
@@ -73,64 +76,75 @@
         #theme-switcher:hover {
             background-color: #ddd;
         }
-        /* Navigation */
+        /* Navigation with 3D Effect */
         nav {
             background-color: var(--nav-bg);
             padding: 10px;
             text-align: center;
+            transform: translateZ(10px);
+            box-shadow: 0 8px 15px var(--shadow-color);
         }
         nav a {
             color: white;
             text-decoration: none;
             margin: 0 15px;
             font-size: 1.1rem;
-            transition: color 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
         nav a:hover {
             color: #4CAF50;
+            transform: translateZ(5px) scale(1.1);
         }
         /* Main Content */
         main {
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            transform-style: preserve-3d;
         }
         /* Tool Categories */
         .tool-category {
             margin-bottom: 40px;
+            transform: translateZ(10px);
         }
         .tool-category h2 {
             font-size: 2rem;
             color: #4CAF50;
             margin-bottom: 20px;
             text-align: center;
+            transform: translateZ(15px);
         }
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
+            transform-style: preserve-3d;
         }
         .tool-card {
             background: var(--card-bg);
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 8px 16px var(--shadow-color);
+            box-shadow: 0 15px 30px var(--shadow-color);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: rotateX(5deg) rotateY(5deg) translateZ(0);
+            transform-style: preserve-3d;
         }
         .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px var(--shadow-color);
+            transform: translateZ(20px) rotateX(0deg) rotateY(0deg);
+            box-shadow: 0 20px 40px var(--shadow-color);
         }
         .tool-card span {
             font-size: 2rem;
             margin-bottom: 15px;
             display: block;
+            transform: translateZ(10px);
         }
         .tool-card h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
             color: var(--text-color);
+            transform: translateZ(5px);
         }
         .tool-card p {
             font-size: 0.9rem;
@@ -144,21 +158,24 @@
             color: white;
             text-decoration: none;
             border-radius: 25px;
-            box-shadow: 0 4px 6px var(--shadow-color);
+            box-shadow: 0 8px 15px var(--shadow-color);
             transition: all 0.3s ease;
+            transform: translateZ(5px);
         }
         .tool-card a:hover {
             background-color: #45a049;
-            box-shadow: 0 6px 10px var(--shadow-color);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 20px var(--shadow-color);
+            transform: translateZ(10px) translateY(-5px);
         }
-        /* Footer */
+        /* Footer with 3D Effect */
         footer {
             background-color: var(--nav-bg);
             color: white;
             text-align: center;
             padding: 20px 0;
             margin-top: 40px;
+            transform: translateZ(5px);
+            box-shadow: 0 -5px 15px var(--shadow-color);
         }
         footer p {
             margin: 0;
@@ -243,6 +260,12 @@
             <section id="pdf-tools" class="tool-category">
                 <h2>PDF Tools</h2>
                 <div class="tool-grid">
+                    <div class="tool-card">
+                        <span>📝➡️📄</span>
+                        <h3>Text to PDF Generator</h3>
+                        <p>Convert plain text to PDF documents easily.</p>
+                        <a href="/Tools/text-to-pdf-generator.html">Use Tool</a>
+                    </div>
                     <div class="tool-card">
                         <span>📄➡️</span>
                         <h3>PDF Compressor</h3>
