@@ -76,13 +76,20 @@
         .privacy-policy-summary { max-width: 1200px; margin: 20px auto; padding: 15px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 5px 15px var(--shadow-color); text-align: center; font-size: 0.85rem; color: #666; }
         .privacy-policy-summary a { color: #4CAF50; text-decoration: none; }
         .privacy-policy-summary a:hover { text-decoration: underline; }
-        #privacy-popup { position: fixed; bottom: 10px; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; padding: 10px; }
-        #exit-ad-popup { position: fixed; top: 10px; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-start; z-index: 1000; padding: 10px; }
-        .popup-content { background: white; padding: 15px; border-radius: 10px; max-width: 90%; width: 400px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); text-align: center; }
-        .popup-content h2 { font-size: 1.3rem; color: #333; margin-bottom: 10px; }
-        .popup-content p { font-size: 0.85rem; color: #666; margin-bottom: 15px; }
-        .popup-content button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 20px; cursor: pointer; transition: background 0.3s ease; margin: 5px; }
-        .popup-content button:hover { background-color: #45a049; }
+        /* Styles for Support Us section */
+        .support-us-section { max-width: 1200px; margin: 40px auto; padding: 20px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 20px var(--shadow-color); text-align: center; }
+        .support-us-section h2 { font-size: 2rem; color: #4CAF50; margin-bottom: 20px; }
+        .support-us-section a { display: inline-block; padding: 12px 30px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 25px; font-size: 1.1rem; transition: all 0.3s ease; }
+        .support-us-section a:hover { background-color: #45a049; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+        .support-us-section p { font-size: 1rem; color: #666; margin-top: 20px; line-height: 1.8; }
+        /* Styles for permanent Privacy Policy section */
+        .privacy-policy-section { max-width: 1200px; margin: 40px auto; padding: 20px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 20px var(--shadow-color); text-align: center; }
+        .privacy-policy-section h2 { font-size: 2rem; color: #4CAF50; margin-bottom: 20px; }
+        .privacy-policy-section p { font-size: 1rem; color: #666; margin-bottom: 15px; }
+        .privacy-policy-section a { color: #4CAF50; text-decoration: none; }
+        .privacy-policy-section a:hover { text-decoration: underline; }
+        .privacy-policy-section button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 25px; cursor: pointer; transition: background 0.3s ease; }
+        .privacy-policy-section button:hover { background-color: #45a049; }
         .hidden { display: none; }
         @media (max-width: 768px) {
             header { padding: 30px 15px; }
@@ -94,10 +101,14 @@
             .tool-card h3 { font-size: 1.3rem; }
             .tool-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
             .ads-section { padding: 15px; }
-            .popup-content { width: 90%; max-width: 350px; padding: 10px; }
-            .popup-content h2 { font-size: 1.2rem; }
-            .popup-content p { font-size: 0.8rem; }
-            .popup-content button { padding: 6px 12px; }
+            .support-us-section { padding: 15px; }
+            .support-us-section h2 { font-size: 1.8rem; }
+            .support-us-section a { padding: 10px 25px; font-size: 1rem; }
+            .support-us-section p { font-size: 0.9rem; }
+            .privacy-policy-section { padding: 15px; }
+            .privacy-policy-section h2 { font-size: 1.8rem; }
+            .privacy-policy-section p { font-size: 0.9rem; }
+            .privacy-policy-section button { padding: 8px 15px; }
         }
         @media (max-width: 480px) {
             header { padding: 20px 10px; }
@@ -114,22 +125,18 @@
             .ads-section { padding: 10px; }
             .privacy-policy-summary { font-size: 0.75rem; }
             #visitor-stats { font-size: 0.9rem; }
-            .popup-content { width: 95%; max-width: 300px; padding: 8px; }
-            .popup-content h2 { font-size: 1rem; }
-            .popup-content p { font-size: 0.75rem; }
-            .popup-content button { padding: 5px 10px; font-size: 0.8rem; }
+            .support-us-section { padding: 10px; }
+            .support-us-section h2 { font-size: 1.5rem; }
+            .support-us-section a { padding: 8px 20px; font-size: 0.9rem; }
+            .support-us-section p { font-size: 0.85rem; }
+            .privacy-policy-section { padding: 10px; }
+            .privacy-policy-section h2 { font-size: 1.5rem; }
+            .privacy-policy-section p { font-size: 0.85rem; }
+            .privacy-policy-section button { padding: 6px 12px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <div id="exit-ad-popup" class="hidden">
-        <div class="popup-content">
-            <h2>Support Us!</h2>
-            <p>Before you leave, you can support us by viewing an ad or simply close this.</p>
-            <button id="view-ad">View Ad</button>
-            <button id="close-ad">Close</button>
-        </div>
-    </div>
     <header>
         <span>🛠️</span>
         <h1>Image & PDF Tools</h1>
@@ -205,20 +212,25 @@
         <div class="privacy-policy-summary">
             <p>We value your privacy. This site uses cookies to improve your experience and serve ads via Google AdSense. Learn more in our <a href="/Tools/privacy-policy.html">Privacy Policy</a>.</p>
         </div>
+        <!-- Updated Support Us Section with Button and Description -->
+        <section class="support-us-section">
+            <h2>Support Us</h2>
+            <a href="https://media-hosting.imagekit.io//53028443c7e64dcb/Screenshot_20250325-120147.png?Expires=1837493541&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=NCPFAhmF03U38~P3Bb7EFS9818YGruEiKE~lRMAFQTa~q8b1s5KJfZbrEwH34uCKNz6m4M2PkCENQRhzlLsW9aeIA~JGHE3T6~dHg25DtXnGWsLakSkjUp0kXT9SZ4mW7nBG1zxtUj7NpeKYRM6~SdydRQc4vG27jhHEmDI8xKXsVZjMEXj2Lp1c-ARQNtH69JydHA3ocLDxbofL7zHR-gUwPXS4K6DZqGhIHd62ZWbPyZWvEjjvPkVX0g4xhthMgJYqSVVR7FWz6xL3L6bIwrYIVbhiYEEioQvaO-cu2LN~RDACiAg~Ovczh-G4SGwjBcc4dfQhEitYz7uOuKJZBA__" target="_blank">Support Now</a>
+            <p>Your support means the world to us! We're a small team working hard to keep Image & PDF Tools free and accessible for everyone. By contributing, you’ll help us cover server costs, develop new features, and continue providing high-quality tools to millions of users worldwide. Even a small donation can make a big difference—join us in empowering creativity and productivity today!</p>
+        </section>
     </main>
+    <!-- Permanent Privacy Policy Section -->
+    <section class="privacy-policy-section" id="privacy-section">
+        <h2>Privacy Policy</h2>
+        <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/Tools/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
+        <button id="accept-privacy">Accept</button>
+    </section>
     <footer>
         <p>© 2025 Image & PDF Tools. All rights reserved. | Author: Kanhaiya Mishra</p>
     </footer>
     <div id="visitor-stats">
         <p>Total Visitors: <span id="total-visitors">0</span></p>
         <p>Active Users Now: <span id="active-users">0</span></p>
-    </div>
-    <div id="privacy-popup" class="hidden">
-        <div class="popup-content">
-            <h2>Privacy Policy</h2>
-            <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/Tools/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
-            <button id="accept-privacy">Accept</button>
-        </div>
     </div>
     <script>
         // Theme Switcher
@@ -242,52 +254,16 @@
             activeUsersSpan.textContent = activeUsers;
         }, 5000);
 
-        // Privacy Popup Logic
-        const privacyPopup = document.getElementById('privacy-popup');
+        // Privacy Section Logic (Permanent)
+        const privacySection = document.getElementById('privacy-section');
         const acceptPrivacyBtn = document.getElementById('accept-privacy');
         const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted');
-        if (!hasAcceptedPrivacy) {
-            privacyPopup.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        } else {
-            privacyPopup.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        if (hasAcceptedPrivacy) {
+            privacySection.classList.add('hidden');
         }
         acceptPrivacyBtn.addEventListener('click', () => {
             localStorage.setItem('privacyAccepted', 'true');
-            privacyPopup.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-
-        // Exit Intent Popup Logic
-        const exitAdPopup = document.getElementById('exit-ad-popup');
-        const closeAdBtn = document.getElementById('close-ad');
-        const viewAdBtn = document.getElementById('view-ad');
-        const hasSeenExitPopup = localStorage.getItem('exitPopupSeen');
-        if (!hasSeenExitPopup) {
-            document.addEventListener('mouseleave', (e) => {
-                if (e.clientY < 0 && exitAdPopup.style.display !== 'block') {
-                    exitAdPopup.style.display = 'block';
-                    localStorage.setItem('exitPopupSeen', 'true');
-                }
-            });
-        } else {
-            exitAdPopup.style.display = 'none';
-        }
-        closeAdBtn.addEventListener('click', () => {
-            exitAdPopup.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        viewAdBtn.addEventListener('click', () => {
-            window.open('https://example.com', '_blank');
-            exitAdPopup.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        exitAdPopup.addEventListener('click', (e) => {
-            if (e.target === exitAdPopup) {
-                exitAdPopup.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
+            privacySection.classList.add('hidden');
         });
     </script>
 </body>
