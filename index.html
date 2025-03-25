@@ -10,6 +10,7 @@
     <meta name="revisit-after" content="7 days">
     <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large">
     <meta name="bingbot" content="index, follow">
+    <meta name="google-adsense-account" content="ca-pub-5923129142652077"> <!-- AdSense Account Meta Tag -->
     <meta property="og:title" content="Image & PDF Tools - Free Modern Online Utilities">
     <meta property="og:description" content="Your go-to platform for image and PDF tools. Compress, convert, resize, merge, and more – all free and user-friendly!">
     <meta property="og:type" content="website">
@@ -25,6 +26,8 @@
     <link rel="canonical" href="https://kanhaiyamishra152.github.io/Tools">
     <link rel="icon" href="https://via.placeholder.com/32" type="image/x-icon">
     <link rel="alternate" hreflang="en" href="https://kanhaiyamishra152.github.io/Tools">
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5923129142652077" crossorigin="anonymous"></script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -42,33 +45,32 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --bg-color: #f9f9f9; --text-color: #333; --header-bg: #4CAF50; --nav-bg: #333; --card-bg: white; --shadow-color: rgba(0, 0, 0, 0.1); }
         [data-theme="dark"] { --bg-color: #222; --text-color: #f9f9f9; --header-bg: #333; --nav-bg: #4CAF50; --card-bg: #333; --shadow-color: rgba(255, 255, 255, 0.1); }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; perspective: 1000px; }
-        header { background: linear-gradient(135deg, var(--header-bg), #45a049); color: white; padding: 40px 20px; text-align: center; box-shadow: 0 10px 20px var(--shadow-color); transform: translateZ(20px); position: relative; }
-        header span { font-size: 4rem; margin-bottom: 10px; display: block; transform: translateZ(30px); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        header { background: linear-gradient(135deg, var(--header-bg), #45a049); color: white; padding: 40px 20px; text-align: center; box-shadow: 0 10px 20px var(--shadow-color); }
+        header span { font-size: 4rem; margin-bottom: 10px; display: block; }
         header h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 10px; }
         header p { font-size: 1.2rem; opacity: 0.9; }
         #theme-switcher { padding: 10px 20px; background-color: #fff; color: #333; border: none; border-radius: 25px; cursor: pointer; margin-top: 15px; transition: all 0.3s ease; }
         #theme-switcher:hover { background-color: #ddd; }
-        nav { background-color: var(--nav-bg); padding: 10px; text-align: center; transform: translateZ(10px); box-shadow: 0 8px 15px var(--shadow-color); }
+        nav { background-color: var(--nav-bg); padding: 10px; text-align: center; box-shadow: 0 8px 15px var(--shadow-color); }
         nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 1.1rem; transition: transform 0.3s ease, color 0.3s ease; }
-        nav a:hover { color: #4CAF50; transform: translateZ(5px) scale(1.1); }
-        main { padding: 20px; max-width: 1200px; margin: 0 auto; transform-style: preserve-3d; }
-        .tool-category { margin-bottom: 40px; transform: translateZ(10px); }
-        .tool-category h2 { font-size: 2rem; color: #4CAF50; margin-bottom: 20px; text-align: center; transform: translateZ(15px); }
-        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; transform-style: preserve-3d; }
-        .tool-card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 15px 30px var(--shadow-color); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; transform: rotateX(5deg) rotateY(5deg) translateZ(0); transform-style: preserve-3d; }
-        .tool-card:hover { transform: translateZ(20px) rotateX(0deg) rotateY(0deg); box-shadow: 0 20px 40px var(--shadow-color); }
-        .tool-card span { font-size: 2rem; margin-bottom: 15px; display: block; transform: translateZ(10px); }
-        .tool-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--text-color); transform: translateZ(5px); }
+        nav a:hover { color: #4CAF50; transform: scale(1.1); }
+        main { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .tool-category { margin-bottom: 40px; }
+        .tool-category h2 { font-size: 2rem; color: #4CAF50; margin-bottom: 20px; text-align: center; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .tool-card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 15px 30px var(--shadow-color); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .tool-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--shadow-color); }
+        .tool-card span { font-size: 2rem; margin-bottom: 15px; display: block; }
+        .tool-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--text-color); }
         .tool-card p { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
-        .tool-card a { display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 25px; box-shadow: 0 8px 15px var(--shadow-color); transition: all 0.3s ease; transform: translateZ(5px); }
-        .tool-card a:hover { background-color: #45a049; box-shadow: 0 12px 20px var(--shadow-color); transform: translateZ(10px) translateY(-5px); }
-        .ads-section { max-width: 1200px; margin: 40px auto; padding: 20px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 20px var(--shadow-color); transform: translateZ(10px); text-align: center; }
-        .ads-section .ad-banner { margin: 0 auto; max-width: 728px; }
-        .ads-section .ad-banner img { width: 100%; height: auto; border-radius: 10px; }
-        footer { background-color: var(--nav-bg); color: white; text-align: center; padding: 20px 0; margin-top: 40px; transform: translateZ(5px); box-shadow: 0 -5px 15px var(--shadow-color); }
+        .tool-card a { display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; }
+        .tool-card a:hover { background-color: #45a049; transform: translateY(-5px); }
+        .ads-section { max-width: 1200px; margin: 40px auto; padding: 20px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 10px 20px var(--shadow-color); text-align: center; }
+        .ads-section ins { margin: 0 auto; max-width: 728px; display: block; }
+        footer { background-color: var(--nav-bg); color: white; text-align: center; padding: 20px 0; margin-top: 40px; box-shadow: 0 -5px 15px var(--shadow-color); }
         footer p { margin: 0; font-size: 0.9rem; }
-        #visitor-stats { background-color: var(--nav-bg); color: white; text-align: center; padding: 15px 0; transform: translateZ(5px); box-shadow: 0 -5px 15px var(--shadow-color); font-size: 1rem; }
+        #visitor-stats { background-color: var(--nav-bg); color: white; text-align: center; padding: 15px 0; font-size: 1rem; }
         #visitor-stats p { margin: 5px 0; }
         #total-visitors, #active-users { font-weight: bold; color: #4CAF50; }
         .privacy-policy-summary { max-width: 1200px; margin: 20px auto; padding: 15px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 5px 15px var(--shadow-color); text-align: center; font-size: 0.85rem; color: #666; }
@@ -98,7 +100,7 @@
             .popup-content button { padding: 6px 12px; }
         }
         @media (max-width: 480px) {
-            header { padding: 20px 10 kommtpx; }
+            header { padding: 20px 10px; }
             header span { font-size: 3rem; }
             header h1 { font-size: 1.8rem; }
             header p { font-size: 0.9rem; }
@@ -110,7 +112,6 @@
             .tool-card p { font-size: 0.8rem; }
             .tool-grid { grid-template-columns: 1fr; }
             .ads-section { padding: 10px; }
-            .ads-section .ad-banner img { max-width: 100%; }
             .privacy-policy-summary { font-size: 0.75rem; }
             #visitor-stats { font-size: 0.9rem; }
             .popup-content { width: 95%; max-width: 300px; padding: 8px; }
@@ -129,13 +130,12 @@
             <button id="close-ad">Close</button>
         </div>
     </div>
-    
     <header>
         <span>🛠️</span>
         <h1>Image & PDF Tools</h1>
         <p>Your ultimate destination for all image and PDF tools. Compress, convert, resize, merge, and more!</p>
         <button id="theme-switcher">Switch to Dark Theme</button>
-Lor    </header>
+    </header>
     <nav>
         <a href="#home">Home</a>
         <a href="#image-tools">Image Tools</a>
@@ -156,7 +156,7 @@ Lor    </header>
                         <span>🔄</span>
                         <h3>Image Converter</h3>
                         <p>Convert images to JPG, PNG, WEBP, and more.</p>
-                        <a href="./Tools/image-converter.html">Use Tool</a>
+                        <a href="/Tools/image-converter.html">Use Tool</a>
                     </div>
                 </div>
             </section>
@@ -179,21 +179,28 @@ Lor    </header>
                         <span>📄➡️</span>
                         <h3>PDF Compressor</h3>
                         <p>Compress PDF files to reduce their size.</p>
-                        <a href="/Tools/text-to-pdf-r.html">Use Tool</a>
+                        <a href="/Tools/pdf-compressor.html">Use Tool</a>
                     </div>
                     <div class="tool-card">
                         <span>📄➡️📝</span>
                         <h3>PDF to Word</h3>
                         <p>Convert PDF files to editable Word documents.</p>
-                        <a href="./Tools/pdf-to-word.html">Use Tool</a>
+                        <a href="/Tools/pdf-to-word.html">Use Tool</a>
                     </div>
                 </div>
             </section>
         </div>
         <section class="ads-section">
-            <div class="ad-banner">
-                <img src="https://via.placeholder.com/728x90" alt="Advertisement Banner">
-            </div>
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block; max-width:728px; width:100%; height:90px;"
+                 data-ad-client="ca-pub-5923129142652077"
+                 data-ad-slot="1234567890" <!-- Replace with your actual ad slot ID -->
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </section>
         <div class="privacy-policy-summary">
             <p>We value your privacy. This site uses cookies to improve your experience and serve ads via Google AdSense. Learn more in our <a href="/Tools/privacy-policy.html">Privacy Policy</a>.</p>
@@ -239,7 +246,6 @@ Lor    </header>
         const privacyPopup = document.getElementById('privacy-popup');
         const acceptPrivacyBtn = document.getElementById('accept-privacy');
         const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted');
-
         if (!hasAcceptedPrivacy) {
             privacyPopup.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -247,19 +253,17 @@ Lor    </header>
             privacyPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
         acceptPrivacyBtn.addEventListener('click', () => {
             localStorage.setItem('privacyAccepted', 'true');
             privacyPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
-        // Exit Intent Popup Logic with Ad Option
+        // Exit Intent Popup Logic
         const exitAdPopup = document.getElementById('exit-ad-popup');
         const closeAdBtn = document.getElementById('close-ad');
         const viewAdBtn = document.getElementById('view-ad');
         const hasSeenExitPopup = localStorage.getItem('exitPopupSeen');
-
         if (!hasSeenExitPopup) {
             document.addEventListener('mouseleave', (e) => {
                 if (e.clientY < 0 && exitAdPopup.style.display !== 'block') {
@@ -270,18 +274,15 @@ Lor    </header>
         } else {
             exitAdPopup.style.display = 'none';
         }
-
         closeAdBtn.addEventListener('click', () => {
             exitAdPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
-
         viewAdBtn.addEventListener('click', () => {
             window.open('https://example.com', '_blank');
             exitAdPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
-
         exitAdPopup.addEventListener('click', (e) => {
             if (e.target === exitAdPopup) {
                 exitAdPopup.style.display = 'none';
