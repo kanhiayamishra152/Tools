@@ -98,7 +98,7 @@
             .popup-content button { padding: 6px 12px; }
         }
         @media (max-width: 480px) {
-            header { padding: 20px 10px; }
+            header { padding: 20px 10 kommtpx; }
             header span { font-size: 3rem; }
             header h1 { font-size: 1.8rem; }
             header p { font-size: 0.9rem; }
@@ -129,13 +129,13 @@
             <button id="close-ad">Close</button>
         </div>
     </div>
-
+    
     <header>
         <span>🛠️</span>
         <h1>Image & PDF Tools</h1>
         <p>Your ultimate destination for all image and PDF tools. Compress, convert, resize, merge, and more!</p>
         <button id="theme-switcher">Switch to Dark Theme</button>
-    </header>
+Lor    </header>
     <nav>
         <a href="#home">Home</a>
         <a href="#image-tools">Image Tools</a>
@@ -196,7 +196,7 @@
             </div>
         </section>
         <div class="privacy-policy-summary">
-            <p>We value your privacy. This site uses cookies to improve your experience and serve ads via Google AdSense. Learn more in our <a href="/privacy-policy.html">Privacy Policy</a>.</p>
+            <p>We value your privacy. This site uses cookies to improve your experience and serve ads via Google AdSense. Learn more in our <a href="/Tools/privacy-policy.html">Privacy Policy</a>.</p>
         </div>
     </main>
     <footer>
@@ -209,7 +209,7 @@
     <div id="privacy-popup" class="hidden">
         <div class="popup-content">
             <h2>Privacy Policy</h2>
-            <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
+            <p>We use cookies to enhance your experience, serve ads, and analyze traffic on Image & PDF Tools. By clicking "Accept," you agree to our <a href="/Tools/privacy-policy.html" target="_blank">Privacy Policy</a>.</p>
             <button id="accept-privacy">Accept</button>
         </div>
     </div>
@@ -235,7 +235,7 @@
             activeUsersSpan.textContent = activeUsers;
         }, 5000);
 
-        // Privacy Popup Logic (Moved to Bottom)
+        // Privacy Popup Logic
         const privacyPopup = document.getElementById('privacy-popup');
         const acceptPrivacyBtn = document.getElementById('accept-privacy');
         const hasAcceptedPrivacy = localStorage.getItem('privacyAccepted');
@@ -244,13 +244,13 @@
             privacyPopup.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         } else {
-            privacyPopup.style.display = 'none'; // Ensure hidden on load if accepted
+            privacyPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
         acceptPrivacyBtn.addEventListener('click', () => {
             localStorage.setItem('privacyAccepted', 'true');
-            privacyPopup.style.display = 'none'; // Reliable hide
+            privacyPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
@@ -263,28 +263,25 @@
         if (!hasSeenExitPopup) {
             document.addEventListener('mouseleave', (e) => {
                 if (e.clientY < 0 && exitAdPopup.style.display !== 'block') {
-                    exitAdPopup.style.display = 'block'; // Show popup
+                    exitAdPopup.style.display = 'block';
                     localStorage.setItem('exitPopupSeen', 'true');
                 }
             });
         } else {
-            exitAdPopup.style.display = 'none'; // Ensure hidden if already seen
+            exitAdPopup.style.display = 'none';
         }
 
-        // Close Button
         closeAdBtn.addEventListener('click', () => {
-            exitAdPopup.style.display = 'none'; // Reliable hide
+            exitAdPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
-        // View Ad Button
         viewAdBtn.addEventListener('click', () => {
-            window.open('https://example.com', '_blank'); // Replace with your ad URL
-            exitAdPopup.style.display = 'none'; // Hide after viewing ad
+            window.open('https://example.com', '_blank');
+            exitAdPopup.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
 
-        // Click Outside to Close
         exitAdPopup.addEventListener('click', (e) => {
             if (e.target === exitAdPopup) {
                 exitAdPopup.style.display = 'none';
