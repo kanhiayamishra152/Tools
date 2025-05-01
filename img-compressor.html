@@ -37,6 +37,29 @@
             color: var(--text-color);
             line-height: 1.6;
         }
+
+        /* --- Added Styles for Top Ad --- */
+        .top-ad-container {
+            text-align: center; /* Center the ad */
+            margin: 15px auto 10px; /* Add margin above and below, center block element */
+            width: 320px; /* Explicitly set width as requested */
+            height: 50px; /* Explicitly set height as requested */
+            overflow: hidden; /* Ensure content stays within dimensions */
+        }
+        .ad-explanation-text {
+            font-size: 0.8em; /* Smaller font size */
+            color: #666; /* Muted color */
+            margin-top: 5px; /* Space between ad and text */
+            text-align: center; /* Center the text */
+            max-width: 320px; /* Align width with ad */
+            margin-left: auto; /* Center the text */
+            margin-right: auto; /* Center the text */
+        }
+         body.dark .ad-explanation-text {
+            color: #a0aec0; /* Adjust color for dark theme */
+        }
+        /* --- End Added Styles --- */
+
         /* Header */
         header {
             background: linear-gradient(135deg, var(--header-bg), #45a049);
@@ -123,6 +146,14 @@
             border-radius: 25px;
             font-size: 1rem;
             transition: border-color 0.3s ease;
+            background-color: var(--card-bg); /* Ensure background color adapts */
+            color: var(--text-color); /* Ensure text color adapts */
+        }
+         [data-theme="dark"] #compressor-tool input[type="file"],
+         [data-theme="dark"] #compressor-tool input[type="text"] {
+            border-color: #555;
+            background-color: #444;
+            color: #f9f9f9;
         }
         #compressor-tool input[type="file"]:focus, #compressor-tool input[type="text"]:focus {
             border-color: #4CAF50;
@@ -144,6 +175,10 @@
             box-shadow: 0 6px 10px var(--shadow-color);
             transform: translateY(-2px);
         }
+         [data-theme="dark"] #compressor-tool button {
+             background-color: #4CAF50; /* Keep button color consistent or adjust */
+             color: white;
+         }
         #compressor-tool #output {
             margin-top: 20px;
             text-align: center;
@@ -172,6 +207,10 @@
             box-shadow: 0 6px 10px var(--shadow-color);
             transform: translateY(-2px);
         }
+         [data-theme="dark"] #compressor-tool #download-link {
+             background-color: #4CAF50; /* Keep consistent or adjust */
+             color: white;
+         }
         #compressor-tool #user-feedback {
             margin-top: 10px;
             font-size: 0.9rem;
@@ -201,6 +240,13 @@
                 font-size: 1rem;
                 margin: 0 10px;
             }
+             .top-ad-container {
+                 width: 300px; /* Adjust for smaller screens if needed */
+                 height: 50px;
+             }
+             .ad-explanation-text {
+                 max-width: 300px; /* Adjust for smaller screens */
+             }
         }
         @media (max-width: 480px) {
             header h1 {
@@ -213,10 +259,35 @@
                 font-size: 0.9rem;
                 margin: 0 8px;
             }
+             .top-ad-container {
+                 width: 100%; /* Allow full width on very small screens */
+                 height: auto; /* Auto height */
+                 max-width: 320px; /* But don't exceed 320px if wider screen */
+             }
+             .ad-explanation-text {
+                 max-width: 100%; /* Allow full width */
+                 padding: 0 10px; /* Add some padding */
+             }
         }
     </style>
 </head>
-<body>
+<body data-theme="light"> <!-- Added default theme -->
+    <!-- Start of Top Advertisement Code -->
+    <div class="top-ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '288e47aa6473f157d60dc208cd307155',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/288e47aa6473f157d60dc208cd307155/invoke.js"></script>
+    </div>
+    <p class="ad-explanation-text">Advertisements displayed here help keep this tool free.</p>
+    <!-- End of Top Advertisement Code -->
+
     <header>
         <span>🛠️</span>
         <h1>Image Compressor</h1>
@@ -225,8 +296,8 @@
     </header>
     <nav>
         <a href="index.html">Home</a>
-        <a href="#image-tools">Image Tools</a>
-        <a href="#pdf-tools">PDF Tools</a>
+        <a href="#image-tools">Image Tools</a> <!-- Changed href to local fragment -->
+        <a href="#pdf-tools">PDF Tools</a> <!-- Changed href to local fragment -->
     </nav>
     <main>
         <div id="compressor-tool">
@@ -234,7 +305,7 @@
             <form id="compress-form">
                 <label for="image-input">Select Image:</label>
                 <input type="file" id="image-input" accept="image/*" required>
-                <label for="compression-level">Compression Level (KB/MB):</label>
+                <label for="compression-level">Target Size (KB/MB):</label> <!-- Changed label for clarity -->
                 <input type="text" id="compression-level" placeholder="e.g., 100KB, 1MB" required>
                 <button type="submit">Compress Image</button>
             </form>
@@ -250,13 +321,22 @@
         <p>© 2023 Image & PDF Tools. All rights reserved. | Author: Kanhaiya Mishra</p>
     </footer>
     <script>
+        // Set default theme on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+             themeSwitcher.textContent = `Switch to ${savedTheme === 'dark' ? 'Light' : 'Dark'} Theme`;
+        });
+
         const themeSwitcher = document.getElementById('theme-switcher');
         themeSwitcher.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme); // Save theme preference
             themeSwitcher.textContent = `Switch to ${newTheme === 'dark' ? 'Light' : 'Dark'} Theme`;
         });
+
 
         document.getElementById('compress-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -269,72 +349,142 @@
 
             outputSection.style.display = 'none';
             userFeedback.textContent = 'Compressing...';
+            userFeedback.style.color = 'var(--text-color)'; // Reset color
 
-            let targetSizeKB = parseFloat(compressionLevelInput);
-            if (compressionLevelInput.toLowerCase().includes('mb')) {
-                targetSizeKB *= 1024;
+            let targetSizeKB;
+            try {
+                let value = parseFloat(compressionLevelInput);
+                if (compressionLevelInput.toLowerCase().includes('mb')) {
+                    targetSizeKB = value * 1024;
+                } else if (compressionLevelInput.toLowerCase().includes('kb')) {
+                    targetSizeKB = value;
+                } else {
+                     targetSizeKB = value; // Assume KB if no unit specified
+                }
+                if (isNaN(targetSizeKB) || targetSizeKB <= 0) throw new Error("Invalid size");
+
+            } catch (e) {
+                userFeedback.textContent = 'Invalid target size. Please enter a number followed by KB or MB (e.g., 100KB, 1MB).';
+                userFeedback.style.color = 'red';
+                return;
             }
-            if (fileInput.files.length === 0 || isNaN(targetSizeKB)) {
-                alert('Invalid input');
+
+            if (fileInput.files.length === 0) {
+                userFeedback.textContent = 'Please select an image first.';
+                userFeedback.style.color = 'red';
                 return;
             }
             const file = fileInput.files[0];
-            const img = await loadImage(file);
-            const canvas = createCanvas(img);
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
 
-            let maxQualityBlob = await compressImage(canvas, 1.0);
-            let maxQualitySizeKB = maxQualityBlob.size / 1024;
-            if (maxQualitySizeKB <= targetSizeKB) {
-                const compressedImageUrl = URL.createObjectURL(maxQualityBlob);
-                outputImage.src = compressedImageUrl;
-                downloadLink.href = compressedImageUrl;
-                downloadLink.download = `compressed_${file.name}`;
-                outputSection.style.display = 'block';
-                userFeedback.textContent = `Final size: ${maxQualitySizeKB.toFixed(2)}KB (Target: ${targetSizeKB}KB)`;
-                return;
+            try {
+                 const img = await loadImage(file);
+                 const canvas = createCanvas(img);
+                 const ctx = canvas.getContext('2d');
+                 ctx.drawImage(img, 0, 0);
+
+                 // Check if image is already smaller than target size
+                 const originalSizeKB = file.size / 1024;
+                 if (originalSizeKB <= targetSizeKB) {
+                    const originalImageUrl = URL.createObjectURL(file);
+                    outputImage.src = originalImageUrl;
+                    downloadLink.href = originalImageUrl;
+                    downloadLink.download = `compressed_${file.name}`;
+                    outputSection.style.display = 'block';
+                    userFeedback.textContent = `Image is already smaller than or equal to the target size (${targetSizeKB}KB). Original size: ${originalSizeKB.toFixed(2)}KB.`;
+                     userFeedback.style.color = 'green';
+                    return;
+                 }
+
+
+                 let maxQualityBlob = await compressImage(canvas, 1.0);
+                 let maxQualitySizeKB = maxQualityBlob.size / 1024;
+
+                 let minQualityBlob = await compressImage(canvas, 0.05); // Lower min quality for wider range
+                 let minQualitySizeKB = minQualityBlob.size / 1024;
+
+                 if (minQualitySizeKB > targetSizeKB) {
+                     userFeedback.textContent = `Cannot compress below ${minQualitySizeKB.toFixed(2)}KB. The minimum possible size for this image is ${minQualitySizeKB.toFixed(2)}KB, which is still larger than your target (${targetSizeKB}KB).`;
+                     userFeedback.style.color = 'orange';
+                     // Provide the smallest possible image for download
+                     const compressedImageUrl = URL.createObjectURL(minQualityBlob);
+                     outputImage.src = compressedImageUrl;
+                     downloadLink.href = compressedImageUrl;
+                     downloadLink.download = `compressed_${file.name}`;
+                     outputSection.style.display = 'block';
+                     return;
+                 }
+
+                let low = 0.05; // Start binary search from the lower bound
+                let high = 1.0;
+                let best_blob = null;
+                let attempts = 10; // Reduce attempts for faster response, 10 is usually enough
+
+                while(attempts > 0) {
+                    let quality = (low + high) / 2;
+                    let blob = await compressImage(canvas, quality);
+                    let sizeKB = blob.size / 1024;
+
+                    // console.log(`Attempt: ${21 - attempts}, Quality: ${quality.toFixed(2)}, Size: ${sizeKB.toFixed(2)}KB`); // Debugging
+
+                    if (sizeKB <= targetSizeKB) {
+                        best_blob = blob; // This is a possible solution
+                        low = quality; // Try higher quality
+                    } else {
+                        high = quality; // Must reduce quality
+                    }
+                    attempts--;
+                 }
+
+                // After binary search, best_blob holds the largest possible blob under the target size (or the smallest over if target is too low)
+                // Re-evaluate with the final 'low' quality to get the closest possible size below target
+                 if (!best_blob || (best_blob.size / 1024 > targetSizeKB)) {
+                     // If binary search failed or the best found is still too large, try the final 'low' quality once more
+                      let finalBlob = await compressImage(canvas, low);
+                      if (finalBlob.size / 1024 <= targetSizeKB || finalBlob.size / 1024 < maxQualitySizeKB) { // Use finalBlob if it meets the target or is smaller than original
+                           best_blob = finalBlob;
+                      } else {
+                           // Fallback: use the minimum possible blob if still no valid best_blob
+                           best_blob = minQualityBlob;
+                      }
+                 }
+
+
+                 if (best_blob) {
+                     const compressedImageUrl = URL.createObjectURL(best_blob);
+                     outputImage.src = compressedImageUrl;
+                     downloadLink.href = compressedImageUrl;
+                     downloadLink.download = `compressed_${file.name}`;
+                     outputSection.style.display = 'block';
+                     userFeedback.textContent = `Compression successful. Final size: ${(best_blob.size / 1024).toFixed(2)}KB (Target: ${targetSizeKB}KB).`;
+                     userFeedback.style.color = 'green';
+                 } else {
+                      userFeedback.textContent = 'Compression failed to meet target size.';
+                      userFeedback.style.color = 'orange';
+                 }
+
+
+            } catch (error) {
+                console.error('Compression error:', error);
+                userFeedback.textContent = 'An error occurred during compression. Please try again.';
+                 userFeedback.style.color = 'red';
+                convertBtn.disabled = false; // Re-enable button on error
+            } finally {
+                 // Re-enable button after processing, regardless of outcome
+                 document.getElementById('compress-form').querySelector('button[type="submit"]').disabled = false;
             }
 
-            let minQualityBlob = await compressImage(canvas, 0.1);
-            let minQualitySizeKB = minQualityBlob.size / 1024;
-            if (minQualitySizeKB > targetSizeKB) {
-                userFeedback.textContent = `Cannot compress below ${minQualitySizeKB.toFixed(2)}KB. Minimum possible size is ${minQualitySizeKB.toFixed(2)}KB.`;
-                outputSection.style.display = 'block';
-                return;
-            }
-
-            let low = 0.1;
-            let high = 1.0;
-            let best_blob = null;
-            for (let i = 0; i < 20; i++) {
-                let quality = (low + high) / 2;
-                let blob = await compressImage(canvas, quality);
-                let sizeKB = blob.size / 1024;
-                if (sizeKB <= targetSizeKB) {
-                    best_blob = blob;
-                    low = quality;
-                } else {
-                    high = quality;
-                }
-            }
-
-            const compressedImageUrl = URL.createObjectURL(best_blob);
-            outputImage.src = compressedImageUrl;
-            downloadLink.href = compressedImageUrl;
-            downloadLink.download = `compressed_${file.name}`;
-            outputSection.style.display = 'block';
-            userFeedback.textContent = `Final size: ${(best_blob.size / 1024).toFixed(2)}KB (Target: ${targetSizeKB}KB)`;
         });
 
         function loadImage(file) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
-                    img.src = e.target.result;
+                    img.onerror = reject; // Handle image loading errors
                     img.onload = () => resolve(img);
+                    img.src = e.target.result;
                 };
+                reader.onerror = reject; // Handle file reading errors
                 reader.readAsDataURL(file);
             });
         }
@@ -347,10 +497,42 @@
         }
 
         function compressImage(canvas, quality) {
-            return new Promise((resolve) => {
-                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
+            return new Promise((resolve, reject) => {
+                 // Check for toBlob support
+                 if (canvas.toBlob) {
+                    canvas.toBlob((blob) => {
+                         if (blob) {
+                            resolve(blob);
+                         } else {
+                             reject(new Error('Canvas toBlob returned null.'));
+                         }
+                    }, 'image/jpeg', quality);
+                 } else {
+                     reject(new Error('Browser does not support canvas.toBlob'));
+                 }
             });
         }
+
+         // Added event listeners for nav links to prevent default hash behavior and potentially scroll
+         document.querySelectorAll('nav a').forEach(anchor => {
+             anchor.addEventListener('click', function(e) {
+                 // Check if the link is for the home page
+                 if (this.getAttribute('href') === 'index.html') {
+                     return; // Let the link navigate naturally
+                 }
+                 // For other links (like #image-tools, #pdf-tools), prevent default and scroll if needed
+                 e.preventDefault();
+                 const targetId = this.getAttribute('href').substring(1);
+                 const targetElement = document.getElementById(targetId);
+                 if (targetElement) {
+                     targetElement.scrollIntoView({ behavior: 'smooth' });
+                 } else {
+                     // Optionally navigate to index.html with hash if on compressor page
+                     window.location.href = 'index.html' + this.getAttribute('href');
+                 }
+             });
+         });
+
     </script>
 </body>
   </html>
