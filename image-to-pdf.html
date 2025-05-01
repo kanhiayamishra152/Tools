@@ -36,6 +36,25 @@
       background: #ffeaa7;
       color: #2d3436;
     }
+
+    /* --- Added Styles for Top Ad --- */
+    .top-ad-container {
+      text-align: center;
+      margin: 15px 0; /* Adjust spacing as needed */
+    }
+    .ad-explanation-text {
+      font-size: 0.8em; /* Smaller font size */
+      color: #666; /* Muted color */
+      margin-top: 5px; /* Space between ad and text */
+    }
+    body.dark .ad-explanation-text {
+        color: #a0aec0; /* Adjust color for dark theme */
+    }
+    body.vibrant .ad-explanation-text {
+        color: #636e72; /* Adjust color for vibrant theme */
+    }
+    /* --- End Added Styles --- */
+
     header {
       background: linear-gradient(135deg, #6b7280, #4a90e2);
       color: white;
@@ -197,10 +216,17 @@
     body.light .ad-area { background: #edf2f7; }
     body.dark .ad-area { background: #4a5568; }
     body.vibrant .ad-area { background: #fefcbf; }
+    .ad-area p {
+      font-size: 0.9em; /* Slightly smaller text for the ad placeholder */
+      text-align: center;
+      margin-bottom: 10px;
+    }
     .ad-area img {
       max-width: 100%;
       height: auto;
       border-radius: 5px;
+      display: block; /* Helps center the image */
+      margin: 0 auto; /* Centers the image */
     }
     footer {
       padding: 1rem;
@@ -227,10 +253,29 @@
       .upload-area label { padding: 10px 20px; }
       .convert-btn { padding: 10px 25px; font-size: 1rem; }
       .preview-container { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .top-ad-container { margin: 10px 0; } /* Less margin on small screens */
+      .ad-explanation-text { font-size: 0.7em; } /* Even smaller text on small screens */
     }
   </style>
 </head>
 <body class="light">
+
+  <!-- Start of Top Advertisement Code -->
+  <div class="top-ad-container">
+    <script type="text/javascript">
+        atOptions = {
+            'key' : '288e47aa6473f157d60dc208cd307155',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+        };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/288e47aa6473f157d60dc208cd307155/invoke.js"></script>
+    <p class="ad-explanation-text">Advertisements displayed here help keep this tool free.</p>
+  </div>
+  <!-- End of Top Advertisement Code -->
+
   <header>
     <h1>Image to PDF Generator</h1>
     <p>Preview, customize, and convert with a 3D twist – Free & Modern!</p>
