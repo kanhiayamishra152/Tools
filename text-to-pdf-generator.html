@@ -1,265 +1,423 @@
+--- START OF FILE text-to-pdf-generator-modern.html ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="3D PDF Editor with preview, formatted notes, and multi-theme support for students and professionals.">
-    <meta name="keywords" content="3D PDF editor, formatted notes, file handling, Python notes, PDF preview, Google AdSense, multi-theme">
+    <meta name="description" content="Modern Rich Text Editor with multi-page PDF generation, preview, themes, save/load, for students and professionals.">
+    <meta name="keywords" content="rich text editor, formatted notes, PDF generator, multi-page PDF, save load, themes, file handling">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="xAI">
-    <title>3D PDF Editor - Formatted Notes with Preview</title>
+    <meta name="author" content="Your Name or Placeholder">
+    <title>Rich PDF Notes Editor</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* --- Base & Themes --- */
         :root {
-            --primary: #6366f1;
-            --secondary: #4f46e5;
-            --background: #ffffff;
-            --text: #1e293b;
-            --border: #e2e8f0;
-            --shadow: rgba(0, 0, 0, 0.2);
+            --primary: #007bff;
+            --secondary: #0056b3;
+            --background: #f8f9fa;
+            --text: #212529;
+            --border: #ced4da;
+            --card-background: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #28a745;
+            --danger: #dc3545;
         }
 
         [data-theme="dark"] {
-            --primary: #818cf8;
-            --secondary: #6366f1;
-            --background: #1e293b;
-            --text: #f8fafc;
-            --border: #475569;
+            --primary: #0d6efd;
+            --secondary: #0b5ed7;
+            --background: #212529;
+            --text: #e9ecef;
+            --border: #495057;
+            --card-background: #343a40;
             --shadow: rgba(255, 255, 255, 0.1);
+            --success: #198754;
+            --danger: #dc3545;
         }
 
         [data-theme="forest"] {
-            --primary: #2d6a4f;
-            --secondary: #1b4332;
-            --background: #f0f7f4;
-            --text: #081c15;
-            --border: #95d5b2;
-            --shadow: rgba(0, 0, 0, 0.2);
+            --primary: #28a745;
+            --secondary: #218838;
+            --background: #e9f5ee;
+            --text: #1e3c2f;
+            --border: #c3e6cb;
+            --card-background: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #198754;
+            --danger: #dc3545;
         }
 
         [data-theme="sunset"] {
-            --primary: #ff6b6b;
-            --secondary: #f94144;
-            --background: #fefae0;
-            --text: #2b2d42;
-            --border: #f4a261;
-            --shadow: rgba(0, 0, 0, 0.2);
+            --primary: #fd7e14;
+            --secondary: #f86201;
+            --background: #fff3eb;
+            --text: #3d2b20;
+            --border: #f5c6cb;
+            --card-background: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #28a745;
+            --danger: #dc3545;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: var(--background);
             color: var(--text);
             margin: 0;
             padding: 20px;
-            transition: all 0.3s;
-            perspective: 1000px; /* 3D effect ke liye */
+            transition: all 0.3s ease-in-out;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
-            transform-style: preserve-3d;
-            box-shadow: 0 10px 20px var(--shadow);
-            border-radius: 15px;
-            background: var(--background);
+            background: var(--card-background);
+            box-shadow: 0 8px 16px var(--shadow);
+            border-radius: 12px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
+        /* --- Toolbar & Controls --- */
         .toolbar {
             display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--background);
-            border-bottom: 2px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
             flex-wrap: wrap;
-            transform: translateZ(20px); /* 3D depth */
+            gap: 10px;
+            padding: 15px;
+            background: var(--background);
+            border-radius: 8px;
+            box-shadow: inset 0 1px 3px var(--shadow);
+            align-items: center;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 10px 15px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px var(--shadow), inset 0 -2px 5px rgba(0, 0, 0, 0.2);
-            transform: translateZ(10px);
+            transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn:hover {
             background: var(--secondary);
-            transform: translateY(-2px) translateZ(15px);
-            box-shadow: 0 8px 20px var(--shadow), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .btn:active {
-            transform: translateY(2px) translateZ(5px);
-            box-shadow: 0 3px 10px var(--shadow);
+            transform: scale(0.98);
         }
 
-        .page-tabs {
-            display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-bottom: 2px solid var(--border);
-            overflow-x: auto;
-            transform: translateZ(10px);
+        .btn-outline {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
         }
+        .btn-outline:hover {
+             background: var(--primary);
+             color: white;
+        }
+
+
+        select, input[type="number"] {
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card-background);
+            color: var(--text);
+            transition: border-color 0.2s ease-in-out;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        select:focus, input[type="number"]:focus {
+             border-color: var(--primary);
+             outline: none;
+        }
+
+        .info-text {
+            margin-left: auto; /* Pushes this element to the right */
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.8;
+            padding: 0 10px; /* Add some padding */
+        }
+
+        /* --- Page Tabs --- */
+        .page-tabs-container {
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: var(--primary) var(--background); /* For Firefox */
+        }
+
+        .page-tabs-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .page-tabs-container::-webkit-scrollbar-track {
+            background: var(--background);
+            border-radius: 10px;
+        }
+
+        .page-tabs-container::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 10px;
+            border: 2px solid var(--background);
+        }
+
 
         .page-tab {
-            padding: 8px 16px;
+            padding: 8px 15px;
             border-radius: 6px;
             cursor: pointer;
             background: var(--background);
-            border: 2px solid var(--border);
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.2s ease-in-out;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap; /* Prevent tabs from wrapping */
+        }
+
+        .page-tab:hover {
+            background: var(--border);
         }
 
         .page-tab.active {
             border-color: var(--primary);
             background: var(--primary);
             color: white;
-            transform: translateZ(5px);
         }
 
+        .page-tab .delete-page-btn {
+            background: none;
+            border: none;
+            color: inherit; /* Inherit color from parent tab */
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            margin-left: 5px; /* Space between name and delete icon */
+            line-height: 1;
+            transition: color 0.2s ease-in-out;
+            opacity: 0.7;
+        }
+         .page-tab .delete-page-btn:hover {
+             opacity: 1;
+             color: var(--danger); /* Highlight delete button on hover */
+         }
+         .page-tab.active .delete-page-btn:hover {
+             color: #ffdddd; /* Lighter red for dark backgrounds */
+         }
+
+
+        /* --- Editor & Preview --- */
         .editor-container {
-            margin-top: 1rem;
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
-            background: var(--background);
-            box-shadow: 0 5px 15px var(--shadow);
-            transform: translateZ(5px);
+            background: var(--card-background);
+            min-height: 600px; /* Ensure editor area has space */
+            display: flex; /* Quill takes flex-grow */
+            flex-direction: column;
         }
 
         .ql-toolbar {
             border: none !important;
             background: var(--background) !important;
             border-bottom: 1px solid var(--border) !important;
+            padding: 10px !important;
+            position: sticky;
+            top: 0;
+            z-index: 1; /* Ensure toolbar stays above editor content */
         }
 
         .ql-container {
             border: none !important;
-            height: 600px;
-            background: var(--background);
+            flex-grow: 1; /* Allow editor content to fill container */
+            background: var(--card-background);
             color: var(--text);
+            font-size: 1rem; /* Default font size */
+            line-height: 1.6;
         }
 
-        .size-control, .theme-control {
-            padding: 8px;
-            border-radius: 6px;
-            border: 2px solid var(--border);
-            background: var(--background);
+        /* Custom Quill styles to match theme */
+        .ql-editor {
             color: var(--text);
-            box-shadow: 0 3px 10px var(--shadow);
-            transition: all 0.3s;
+            background: var(--card-background);
+            min-height: 580px; /* Adjust based on container height and toolbar height */
         }
-
-        .size-control:hover, .theme-control:hover {
-            transform: translateZ(5px);
-        }
-
-        .word-count {
-            padding: 8px;
+        .ql-editor.ql-blank::before {
             color: var(--text);
-            font-size: 14px;
-            transform: translateZ(5px);
+            opacity: 0.5;
         }
-
-        .ads-container {
-            margin: 20px 0;
-            text-align: center;
-            transform: translateZ(5px);
+        /* Add styles for Quill formats */
+        .ql-editor h1 { color: var(--text); }
+        .ql-editor h2 { color: var(--text); }
+        .ql-editor h3 { color: var(--text); }
+        .ql-editor strong { font-weight: bold; }
+        .ql-editor em { font-style: italic; }
+        .ql-editor u { text-decoration: underline; }
+        .ql-editor s { text-decoration: line-through; }
+        .ql-editor ol, .ql-editor ul {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-left: 30px;
         }
+         .ql-editor li {
+             margin-bottom: 5px;
+         }
+        .ql-editor .ql-indent-1 { padding-left: 3em; }
+        .ql-editor .ql-indent-2 { padding-left: 6em; }
+        /* Add more specific styles for colors, backgrounds if needed */
 
         .preview-container {
             margin-top: 20px;
-            padding: 20px;
+            padding: 15px;
             border: 2px dashed var(--border);
-            background: var(--background);
+            background: var(--card-background);
+            border-radius: 8px;
             display: none;
-            box-shadow: 0 5px 15px var(--shadow);
-            transform: translateZ(5px);
+            min-height: 500px;
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .preview-container iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+            min-height: 470px;
+        }
+
+        /* --- Utility Classes & Other Elements --- */
+        .hidden {
+            display: none !important;
+        }
+
+        .feedback-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+            font-size: 0.9rem;
+        }
+
+        .feedback-message.success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .feedback-message.error {
+            background-color: var(--danger);
+            color: white;
         }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
-            crossorigin="anonymous"></script>
+    <!-- PDFMake scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 style="display: none;">3D PDF Editor with Preview</h1>
+            <h1>Rich PDF Notes Editor</h1>
         </header>
+
         <div class="toolbar">
-            <select class="size-control" id="pageSize">
-                <option value="595,842">A4 (210×297mm)</option>
-                <option value="612,792">Letter (8.5×11in)</option>
-                <option value="612,1008">Legal (8.5×14in)</option>
+            <select id="pageSize" title="Select Page Size">
+                <option value="A4">A4 (210×297mm)</option>
+                <option value="LETTER">Letter (8.5×11in)</option>
+                <option value="LEGAL">Legal (8.5×14in)</option>
             </select>
-            <button class="btn" id="newPage">+ New Page</button>
-            <button class="btn" id="exportPdf">Export PDF</button>
-            <button class="btn" id="previewPdf">Preview PDF</button>
-            <button class="btn" id="sampleNotes">Add Sample Notes</button>
-            <select class="theme-control" id="themeSelect">
+             <select id="orientation" title="Select Page Orientation">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+            </select>
+            <button class="btn" id="newPageBtn" title="Add New Page">+ New Page</button>
+            <button class="btn" id="exportPdfBtn" title="Export to PDF">Export PDF</button>
+            <button class="btn btn-outline" id="previewPdfBtn" title="Preview PDF">Preview PDF</button>
+            <button class="btn" id="saveBtn" title="Save Notes to Browser">Save Notes</button>
+            <button class="btn btn-outline" id="loadBtn" title="Load Notes from Browser">Load Notes</button>
+            <button class="btn btn-outline" id="sampleNotesBtn" title="Add Sample Content">Add Sample Notes</button>
+            <select id="themeSelect" title="Select Theme">
                 <option value="light">Light Theme</option>
                 <option value="dark">Dark Theme</option>
                 <option value="forest">Forest Theme</option>
                 <option value="sunset">Sunset Theme</option>
             </select>
-            <span class="word-count" id="wordCount">Words: 0 (Max ~500 words per A4 page)</span>
+            <span class="info-text" id="wordCharCount">Words: 0 | Chars: 0</span>
         </div>
 
-        <div class="ads-container">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
-                 data-ad-slot="YOUR_AD_SLOT_ID"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+         <div id="feedback" class="feedback-message hidden" aria-live="polite"></div>
+
+
+        <div class="page-tabs-container" id="pageTabs"></div>
+
+        <div id="editorContainer">
+            <!-- Quill editor instances will be dynamically added here -->
         </div>
 
-        <div class="page-tabs" id="pageTabs"></div>
-        
-        <div class="editor-container" id="editorContainer"></div>
         <div class="preview-container" id="previewContainer"></div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script>
+        // Ensure pdfMake fonts are loaded
+        pdfMake.vfs = pdfMake_fonts.pdfMake.vfs;
+
         class PDFEditor {
             constructor() {
-                this.editors = [];
-                this.currentPage = 0;
+                this.editors = []; // Stores { id, quill, size, orientation, content: Delta }
+                this.currentPageIndex = 0;
                 this.editorContainer = document.getElementById('editorContainer');
-                this.pageTabs = document.getElementById('pageTabs');
-                this.wordCountElement = document.getElementById('wordCount');
+                this.pageTabsContainer = document.getElementById('pageTabs');
+                this.wordCharCountElement = document.getElementById('wordCharCount');
                 this.themeSelect = document.getElementById('themeSelect');
+                this.pageSizeSelect = document.getElementById('pageSize');
+                 this.orientationSelect = document.getElementById('orientation');
                 this.previewContainer = document.getElementById('previewContainer');
+                this.feedbackElement = document.getElementById('feedback');
+
+                this.localStorageKey = 'richPdfNotes';
+
                 this.initEventListeners();
-                this.createNewPage();
+                this.loadNotes(); // Try loading notes on startup
+                 if (this.editors.length === 0) {
+                    this.createNewPage(); // Create a default page if no notes are loaded
+                } else {
+                     this.switchPage(this.currentPageIndex); // Switch to the last active page or 0
+                }
+
+                this.applySavedTheme(); // Apply theme from localStorage
             }
 
-            createNewPage() {
+            /* --- Page Management --- */
+            createNewPage(content = null) {
+                const pageCount = this.editors.length;
+                const editorDivId = `editor-${pageCount}`;
                 const editorDiv = document.createElement('div');
-                editorDiv.className = 'editor';
-                editorDiv.style.display = 'none';
-                const editorId = `editor-${this.editors.length}`;
-                editorDiv.id = editorId;
+                editorDiv.id = editorDivId;
+                editorDiv.className = 'editor'; // Use a common class for editor divs
+                editorDiv.style.display = 'none'; // Hide until active
                 this.editorContainer.appendChild(editorDiv);
 
-                const quill = new Quill(`#${editorId}`, {
+                const quill = new Quill(`#${editorDivId}`, {
                     theme: 'snow',
+                    placeholder: 'Start writing your notes here...',
                     modules: {
                         toolbar: [
                             [{ 'header': [1, 2, 3, false] }],
@@ -274,185 +432,667 @@
                     }
                 });
 
-                this.editors.push({
-                    editor: quill,
-                    size: document.getElementById('pageSize').value.split(',').map(Number),
-                    content: quill.getContents()
-                });
+                if (content) {
+                   quill.setContents(content);
+                } else {
+                    // Set initial content to a blank paragraph with default style
+                    quill.setContents([{ insert: '\n' }]);
+                }
+
+
+                const newPageData = {
+                    id: editorDivId,
+                    quill: quill,
+                    size: this.pageSizeSelect.value, // Default size
+                    orientation: this.orientationSelect.value, // Default orientation
+                    content: quill.getContents() // Initial content as Delta
+                };
+                this.editors.push(newPageData);
 
                 quill.on('text-change', () => {
-                    this.updateWordCount();
+                    // Update content in data model
+                    newPageData.content = quill.getContents();
+                    this.updateWordCharCount();
                 });
+                 quill.on('selection-change', () => {
+                    // Also update count on selection change for real-time feedback
+                    this.updateWordCharCount();
+                });
+
 
                 this.updatePageTabs();
-                if (this.editors.length === 1) {
-                    this.switchPage(0);
-                }
+                // Switch to the new page if it's the first one, or manually switch after load
+                 if (this.editors.length === 1 && !content) {
+                     this.switchPage(0);
+                 } else if (content) {
+                     // Do not auto-switch if loading content, switchPage is called after load loop
+                 } else {
+                      this.switchPage(pageCount); // Switch to the newly created page
+                 }
             }
 
-            updatePageTabs() {
-                this.pageTabs.innerHTML = this.editors.map((_, i) => 
-                    `<div class="page-tab ${i === this.currentPage ? 'active' : ''}" 
-                          data-page="${i}">Page ${i + 1}</div>`
-                ).join('');
-                
-                this.pageTabs.querySelectorAll('.page-tab').forEach(tab => {
-                    tab.addEventListener('click', () => this.switchPage(parseInt(tab.dataset.page)));
+            deletePage(index) {
+                if (this.editors.length <= 1) {
+                    this.showFeedback('Cannot delete the last page.', 'error');
+                    return;
+                }
+
+                // Remove the editor div from DOM
+                const editorDiv = document.getElementById(this.editors[index].id);
+                if (editorDiv) {
+                    this.editorContainer.removeChild(editorDiv);
+                }
+
+                // Remove the data from the array
+                this.editors.splice(index, 1);
+
+                // Update page IDs and switch to an adjacent page
+                this.editors.forEach((page, i) => {
+                    page.id = `editor-${i}`;
+                    document.getElementById(page.id)?.setAttribute('id', `editor-${i}`); // Update DOM id
                 });
+
+                this.currentPageIndex = Math.max(0, index - 1);
+                this.updatePageTabs();
+                this.switchPage(this.currentPageIndex);
+                 this.showFeedback(`Page ${index + 1} deleted.`, 'success');
             }
 
             switchPage(index) {
-                this.editors[this.currentPage].content = this.editors[this.currentPage].editor.getContents();
-                this.currentPage = index;
-                
-                this.editorContainer.querySelectorAll('.editor').forEach((editor, i) => {
-                    editor.style.display = i === index ? 'block' : 'none';
-                });
-                
-                this.editors[index].editor.setContents(this.editors[index].content);
-                this.updatePageTabs();
-                this.updateWordCount();
-            }
+                if (index < 0 || index >= this.editors.length || index === this.currentPageIndex) {
+                    return; // Invalid index or already on this page
+                }
 
-            updateWordCount() {
-                const text = this.editors[this.currentPage].editor.getText().trim();
+                // 1. Save current page's content
+                if (this.editors[this.currentPageIndex] && this.editors[this.currentPageIndex].quill) {
+                     this.editors[this.currentPageIndex].content = this.editors[this.currentPageIndex].quill.getContents();
+                      // Save current size/orientation selection to the page data
+                    this.editors[this.currentPageIndex].size = this.pageSizeSelect.value;
+                    this.editors[this.currentPageIndex].orientation = this.orientationSelect.value;
+                }
+
+
+                // 2. Hide all editor containers
+                this.editorContainer.querySelectorAll('.editor').forEach(editorDiv => {
+                    editorDiv.style.display = 'none';
+                });
+
+                // 3. Show the target page's container and set its content
+                this.currentPageIndex = index;
+                const targetPage = this.editors[index];
+                const targetEditorDiv = document.getElementById(targetPage.id);
+
+                if (targetEditorDiv) {
+                    targetEditorDiv.style.display = 'block';
+                    // Use timeout to ensure display:block is applied before setting content,
+                    // which can prevent Quill from rendering incorrectly.
+                    setTimeout(() => {
+                         targetPage.quill.setContents(targetPage.content)                          // Restore size/orientation for the switched page
+                         this.pageSizeSelect.value = targetPage.size || 'A4'; // Default to A4 if not set
+                         this.orientationSelect.value = targetPage.orientation || 'portrait'; // Default to portrait
+                         this.updateWordCharCount();
+                    }, 10); // Small delay
+
+
+                } // <-- This closes the 'if (targetEditorDiv)' block
+
+                // 4. Update tab UI
+                this.updatePageTabs(); // <-- This is the next statement in the switchPage function
+            } // <-- This closes the 'switchPage' function
+
+
+            /* --- Word/Character Count --- */
+            updateWordCharCount() {
+                const text = this.editors[this.currentPageIndex].quill.getText().trim();
                 const words = text.split(/\s+/).filter(word => word.length > 0).length;
-                this.wordCountElement.textContent = `Words: ${words} (Max ~500 words per A4 page)`;
+                const chars = text.length;
+                this.wordCharCountElement.textContent = `Words: ${words} | Chars: ${chars}`;
             }
 
-            parseFormattedText(text) {
-                const lines = text.split('\n');
-                const formattedLines = [];
-                
-                lines.forEach(line => {
-                    let formattedLine = line.trim();
-                    
-                    if (formattedLine.startsWith('# ')) {
-                        formattedLine = formattedLine.replace('# ', '').trim();
-                        formattedLines.push({ text: formattedLine, bold: true, size: 16 });
-                    } else if (formattedLine.startsWith('## ')) {
-                        formattedLine = formattedLine.replace('## ', '').trim();
-                        formattedLines.push({ text: formattedLine, bold: true, size: 14 });
-                    } else if (formattedLine.startsWith('- ')) {
-                        formattedLine = formattedLine.replace('- ', '').trim();
-                        formattedLines.push({ text: '• ' + formattedLine, size: 12 });
-                    } else if (formattedLine.includes('**')) {
-                        formattedLine = formattedLine.replace(/\*\*/g, '').trim();
-                        formattedLines.push({ text: formattedLine, bold: true, size: 12 });
-                    } else if (formattedLine.startsWith('"python') || formattedLine.startsWith('```python')) {
-                        // Skip code block start
-                    } else if (formattedLine === '```') {
-                        // Skip code block end
-                    } else if (formattedLine.startsWith('Example:')) {
-                        formattedLines.push({ text: formattedLine, italic: true, size: 12 });
-                    } else if (formattedLine) {
-                        formattedLine = formattedLine.replace(/['"`]/g, ''); // Remove unwanted quotes or backticks
-                        formattedLines.push({ text: formattedLine, size: 12 });
-                    }
-                });
-                
-                return formattedLines;
-            }
+            /* --- PDF Generation (using pdfmake) --- */
 
-            async generatePDF(preview = false) {
-                const pdfDoc = await PDFLib.PDFDocument.create();
-                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-                const boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+            // Converts Quill Delta to pdfmake document definition structure
+            deltaToPdfMake(delta) {
+                const docContent = [];
+                let currentTextRun = '';
+                let currentAttributes = {};
+                let listStack = []; // To handle nested lists (simplified)
 
-                for (const page of this.editors) {
-                    const [width, height] = page.size;
-                    const pdfPage = pdfDoc.addPage([width, height]);
-                    const margin = 50;
-                    let y = height - margin;
-                    const maxWidth = width - (2 * margin);
+                const pushTextRun = () => {
+                    if (currentTextRun) {
+                        const run = { text: currentTextRun };
+                        // Map Quill attributes to pdfmake styles
+                        if (currentAttributes.bold) run.bold = true;
+                        if (currentAttributes.italic) run.italics = true;
+                        if (currentAttributes.underline) run.decoration = 'underline';
+                         if (currentAttributes.strike) run.decoration = run.decoration ? run.decoration + ' lineThrough' : 'lineThrough';
+                        if (currentAttributes.color) run.color = currentAttributes.color;
+                        if (currentAttributes.background) run.background = currentAttributes.background;
+                         if (currentAttributes.size) {
+                            // Map Quill sizes to points (approximate)
+                            const sizeMap = {
+                                'small': 8,
+                                false: 12, // Normal
+                                'large': 15,
+                                'huge': 22
+                            };
+                            run.fontSize = sizeMap[currentAttributes.size] || 12;
+                         }
+                         // Handle headers - map to fontSize and bold (applied per run for simplicity)
+                         if (currentAttributes.header) {
+                            const headerSizeMap = { 1: 22, 2: 18, 3: 14 }; // Default font size is 12
+                            run.fontSize = headerSizeMap[currentAttributes.header] || 12;
+                            run.bold = true;
+                         }
 
-                    const formattedLines = this.parseFormattedText(page.editor.getText());
+                        // If currently building a list item, push to the current list item's text array
+                        if (listStack.length > 0 && listStack[listStack.length - 1].items.length > 0) {
+                            const currentListItems = listStack[listStack.length - 1].items;
+                            const lastItem = currentListItems[currentListItems.length - 1];
 
-                    for (const line of formattedLines) {
-                        if (y <= margin) break;
+                             // Ensure the last item has a 'text' array to push into
+                             if (!lastItem.text || !Array.isArray(lastItem.text)) {
+                                 lastItem.text = [];
+                             }
+                             lastItem.text.push(run);
 
-                        const words = line.text.split(' ');
-                        let currentLine = '';
-
-                        for (const word of words) {
-                            const testLine = currentLine + (currentLine ? ' ' : '') + word;
-                            const textWidth = (line.bold ? boldFont : font).widthOfTextAtSize(testLine, line.size);
-
-                            if (textWidth > maxWidth && currentLine) {
-                                pdfPage.drawText(currentLine, {
-                                    x: margin,
-                                    y: y,
-                                    size: line.size,
-                                    font: line.bold ? boldFont : font,
-                                    color: PDFLib.rgb(0, 0, 0)
-                                });
-                                y -= line.size + 4;
-                                currentLine = word;
+                        } else {
+                             // Otherwise, push as a paragraph element.
+                             // Check if the last element added was a paragraph object.
+                            if (docContent.length > 0 && typeof docContent[docContent.length - 1] === 'object' && Array.isArray(docContent[docContent.length - 1].text)) {
+                                 // Add to the current paragraph's text array
+                                docContent[docContent.length - 1].text.push(run);
                             } else {
-                                currentLine = testLine;
+                                // Start a new paragraph (an object with a 'text' array)
+                                 docContent.push({ text: [run] });
                             }
                         }
 
-                        if (currentLine && y > margin) {
-                            pdfPage.drawText(currentLine, {
-                                x: margin,
-                                y: y,
-                                size: line.size,
-                                font: line.bold ? boldFont : font,
-                                color: PDFLib.rgb(0, 0, 0)
-                            });
-                            y -= line.size + 4;
+                        currentTextRun = '';
+                        currentAttributes = {}; // Reset attributes after applying
+                    }
+                };
+
+                delta.ops.forEach(op => {
+                    // Apply new attributes first for the *next* text run
+                    if (op.attributes) {
+                         // Merge attributes. Quill's format operations usually apply *new* attributes.
+                         currentAttributes = { ...currentAttributes, ...op.attributes };
+                    }
+
+                    if (op.insert) {
+                        if (typeof op.insert === 'string') {
+                            const lines = op.insert.split('\n');
+                            lines.forEach((line, i) => {
+                                if (line) {
+                                    currentTextRun += line;
+                                }
+
+                                // If it's a newline character (and not the last part of a multi-line insert)
+                                if (i < lines.length - 1) {
+                                     pushTextRun(); // Push whatever text was accumulated before the newline
+
+                                    // Handle block-level formats associated with the newline (like header, list, align)
+                                     if (op.attributes) {
+                                        if (op.attributes.list) {
+                                             const type = op.attributes.list;
+                                             const indent = op.attributes.indent || 0; // Quill indent starts at 0 for no indent
+
+                                            // Close lists that are finished or indentation decreased
+                                            while (listStack.length > 0 && listStack[listStack.length - 1].indent >= indent) {
+                                                 listStack.pop();
+                                            }
+
+                                            // If the list type changes at the same indent level, close and restart.
+                                             // (Simplified: just close if indent <= current list indent)
+
+
+                                            // Start a new list or a nested list item
+                                             if (listStack.length === 0 || listStack[listStack.length - 1].indent < indent) {
+                                                // We need to start a new list structure in the pdfmake content.
+                                                // If increasing indent, this new list should be the *last item's content* of the parent list.
+                                                // If indent is 0, it's a new top-level list.
+
+                                                const newListObj = { [type]: [] }; // { ul: [] } or { ol: [] }
+                                                 if (indent > 0) {
+                                                    // Apply margin for indentation visually
+                                                    newListObj.margin = [(indent) * 30, 0, 0, 0]; // Simple approx margin
+                                                    // If this is a nested list, add it as the LAST item's content of the parent list
+                                                     if (listStack.length > 0) {
+                                                         const parentListItems = listStack[listStack.length - 1].items;
+                                                         if (parentListItems.length > 0) {
+                                                              // Add the new list object as a follow-up to the last item
+                                                             parentListItems[parentListItems.length - 1].stack = [ ...(parentListItems[parentListItems.length - 1].stack || []), newListObj ];
+                                                              delete parentListItems[parentListItems.length - 1].text; // Clear text if adding nested list
+                                                             // Note: This nested list handling is basic and might not perfectly mirror Quill's complex nesting.
+                                                         } else {
+                                                              // This case implies indent > 0 but no parent items... shouldn't happen with valid Delta?
+                                                              docContent.push(newListObj); // Add as top level as fallback
+                                                         }
+                                                     } else {
+                                                          // Top-level list with indent? Unlikely in basic Quill, but add margin.
+                                                           docContent.push(newListObj);
+                                                     }
+
+                                                }
+
+                                                // Now that the correct list structure is in place (or continued), add a new list item container.
+                                                if (listStack.length > 0) {
+                                                    listStack[listStack.length - 1].items.push({ text: [] }); // Create a new item with an empty text array
+                                                    // Apply paragraph-level attributes (like align) to the list item object
+                                                     if (op.attributes.align) {
+                                                         const lastItem = listStack[listStack.length - 1].items[listStack[listStack.length - 1].items.length - 1];
+                                                         lastItem.alignment = op.attributes.align;
+                                                     }
+                                                }
+
+
+                                            } else { // Newline with non-list block attribute (header, align) or just a simple newline
+                                                 // Close any open lists
+                                                 while (listStack.length > 0) {
+                                                     listStack.pop();
+                                                 }
+
+                                                // A newline without a subsequent list attribute ends the current paragraph/list item.
+                                                // The next text run will start a new paragraph or list item.
+                                                // If this newline has header or align attributes, they apply to the *next* paragraph implicitly when the next text run is pushed.
+
+                                                // Add an empty paragraph element to simulate a paragraph break if not already ending one
+                                                 // This is needed because `pushTextRun` only adds to the last element if it's a paragraph.
+                                                 // If the last element was a list, the newline ended the list item. Now we need a new paragraph.
+                                                 if (docContent.length === 0 || typeof docContent[docContent.length - 1] !== 'object' || !Array.isArray(docContent[docContent.length - 1].text) || docContent[docContent.length - 1].text.length > 0) {
+                                                      docContent.push({ text: [] });
+                                                 }
+
+                                                 // Apply block attributes to the *last* (now potentially empty) paragraph object
+                                                 if (op.attributes) {
+                                                     const lastParagraph = docContent[docContent.length - 1];
+                                                      if (op.attributes.header && lastParagraph.text) { // Only apply header style if there will be text
+                                                            const headerSizeMap = { 1: 22, 2: 18, 3: 14 };
+                                                            // Note: This is tricky. Header style typically applies to the whole paragraph text.
+                                                            // The delta parser applies it to the text run.
+                                                            // A cleaner way is to have specific pdfmake styles for headers and apply them to the paragraph object.
+                                                            // For now, rely on the text run formatting already handled in pushTextRun.
+                                                            // If you needed explicit pdfmake paragraph styles: lastParagraph.style = `header${op.attributes.header}`;
+                                                      }
+                                                     if (op.attributes.align) {
+                                                          lastParagraph.alignment = op.attributes.align;
+                                                     }
+                                                 }
+
+                                            }
+                                        }
+                                    });
+                                } else if (typeof op.insert === 'object') {
+                                    // Handle non-text inserts like images
+                                    if (op.insert.image) {
+                                        pushTextRun(); // Push any preceding text
+                                        // Add image object to docContent
+                                        // This is basic; doesn't handle size/alignment attributes from Quill
+                                        // You may need to decode base64 and handle errors
+                                        docContent.push({
+                                            image: op.insert.image, // Base64 data
+                                            width: op.attributes?.width || 200, // Try to use attribute width, default to 200
+                                            alignment: op.attributes?.align || 'center' // Default alignment for images
+                                        });
+                                    }
+                                    // Add handlers for other types if needed (e.g., video, formula)
+                                }
+                            }
+
+                            // Clear attributes that apply *only* to the newline character itself (like header, list, align, indent)
+                            // These block attributes signal the *end* of a block and define the *next* block's type/styling.
+                             // Remove them from `currentAttributes` so they don't affect the *next* text insert.
+                             if (op.attributes) {
+                                if (op.attributes.header) delete currentAttributes.header;
+                                if (op.attributes.list) delete currentAttributes.list;
+                                if (op.attributes.align) delete currentAttributes.align;
+                                if (op.attributes.indent) delete currentAttributes.indent;
+                                // Also handle blot-specific attributes like image width/height if they were on the newline op
+                                 if (op.insert && typeof op.insert === 'object') {
+                                    if (op.insert.image) {
+                                        if(op.attributes.width) delete currentAttributes.width;
+                                        if(op.attributes.height) delete currentAttributes.height;
+                                    }
+                                 }
+                             }
                         }
+                    });
+
+                    // Push any remaining text after the loop finishes
+                    pushTextRun();
+
+                    // Clean up empty paragraphs or list items if any were created erroneously at the end
+                    // This is a simple cleanup; a complex Delta might need more robust post-processing
+                    while (docContent.length > 0) {
+                        const last = docContent[docContent.length - 1];
+                         // Remove empty paragraph objects
+                         if (typeof last === 'object' && Array.isArray(last.text) && last.text.length === 0 && !last.ul && !last.ol && !last.image && !last.stack) {
+                             docContent.pop();
+                         }
+                         // Remove empty top-level lists
+                         else if (last.ul && last.ul.length === 0) {
+                             docContent.pop();
+                         } else if (last.ol && last.ol.length === 0) {
+                             docContent.pop();
+                         }
+                         // Note: Cleaning up empty nested lists or stack arrays requires recursion/iteration
+                         // into the structure, which is complex. Basic cleanup suffices for common cases.
+                        else {
+                            break;
+                        }
+                    }
+
+
+                    // Basic pdfmake document definition structure for this page's content
+                    // Note: Global styles, default style, etc., are in the main generatePDF function.
+                    return {
+                        content: docContent
+                         // Styles, defaultStyle, etc. will be merged in generatePDF
+                    };
+                }
+
+
+                async generatePDF(preview = false) {
+                     if (this.editors.length === 0) {
+                         this.showFeedback('No pages to export!', 'error');
+                         return;
+                     }
+
+                     // Ensure content of the current page is saved to data model before generating
+                     if (this.editors[this.currentPageIndex] && this.editors[this.currentPageIndex].quill) {
+                         this.editors[this.currentPageIndex].content = this.editors[this.currentPageIndex].quill.getContents();
+                          this.editors[this.currentPageIndex].size = this.pageSizeSelect.value;
+                        this.editors[this.currentPageIndex].orientation = this.orientationSelect.value;
+                     }
+
+
+                    const fullDocDefinition = {
+                        info: {
+                            title: 'Rich Notes Export',
+                            author: document.querySelector('meta[name="author"]')?.content || 'PDF Editor',
+                            subject: 'Exported Notes',
+                            keywords: 'notes, pdf, editor',
+                        },
+                        pageSize: this.editors[0].size, // Use size from the first page data for the document
+                        pageOrientation: this.editors[0].orientation, // Use orientation from first page data for the document
+                        pageMargins: [ 40, 40, 40, 40 ], // [left, top, right, bottom]
+                        content: [], // This will be populated page by page
+                                                styles: {
+                             // Define styles here if needed globally, e.g., for headers
+                             // h1: { fontSize: 22, bold: true, margin: [0, 20, 0, 10] },
+                             // h2: { fontSize: 18, bold: true, margin: [0, 15, 0, 8] },
+                             // h3: { fontSize: 14, bold: true, margin: [0, 10, 0, 5] }
+                        },
+                        defaultStyle: {
+                            fontSize: 10, // pdfmake default is 10, Quill's is 12. Let's stick to 10 or make it an option. Default 10 for better fit.
+                            lineHeight: 1.4, // Adjust line height for PDF
+                            // Add line height to list items to prevent text overlap on wraps
+                             // This might need to be applied to list items specifically if default doesn't work
+                        }
+                    };
+
+
+                    // Process each page's content
+                    this.editors.forEach((pageData, index) => {
+                         // Note: pdfmake's pageSize and pageOrientation are document-level settings.
+                         // To have different sizes *per page*, you'd need to create separate PDF documents
+                         // and potentially merge them, which is much more complex.
+                         // We'll stick to setting the document's size/orientation based on the *first* page's setting.
+                         // The individual page data's size/orientation is still saved/loaded but mainly for display
+                         // in the dropdowns when switching pages.
+
+                        const pageContent = this.deltaToPdfMake(pageData.content);
+
+                        // Add content for this page
+                        fullDocDefinition.content.push(...pageContent.content);
+
+                        // Add a page break after each page's content, except the last one
+                        if (index < this.editors.length - 1) {
+                            fullDocDefinition.content.push({ text: '', pageBreak: 'after' });
+                        }
+                    });
+
+                     try {
+                        const pdfDocGenerator = pdfMake.createPdfKitDocument(fullDocDefinition);
+
+                        if (preview) {
+                             pdfDocGenerator.getBlob((blob) => {
+                                 const url = URL.createObjectURL(blob);
+                                 // Revoke previous preview URL to free memory
+                                 if (this.currentPreviewUrl) {
+                                     URL.revokeObjectURL(this.currentPreviewUrl);
+                                 }
+                                 this.currentPreviewUrl = url; // Store the new URL
+
+                                 this.previewContainer.innerHTML = `<iframe src="${url}" width="100%" height="500px"></iframe>`;
+                                 this.previewContainer.style.display = 'block';
+                                  this.showFeedback('PDF preview generated.', 'success');
+                             });
+
+                        } else {
+                            // pdfDocGenerator.download() method handles saving the file directly
+                             const filename = `notes-${new Date().toISOString().split('T')[0]}.pdf`;
+                             pdfDocGenerator.download(filename, () => {
+                                 this.showFeedback('PDF exported successfully.', 'success');
+                             });
+                        }
+                     } catch (error) {
+                         console.error("Error generating PDF:", error);
+                         this.showFeedback(`Error generating PDF: ${error.message}`, 'error');
+                     }
+                }
+
+                /* --- Save/Load --- */
+                saveNotes() {
+                     try {
+                        // Ensure current page content is saved before saving all
+                         if (this.editors[this.currentPageIndex] && this.editors[this.currentPageIndex].quill) {
+                             this.editors[this.currentPageIndex].content = this.editors[this.currentPageIndex].quill.getContents();
+                             this.editors[this.currentPageIndex].size = this.pageSizeSelect.value;
+                             this.editors[this.currentPageIndex].orientation = this.orientationSelect.value;
+                         }
+
+                         // Prepare data for saving (only content, size, orientation, and current page index)
+                        const saveData = {
+                            currentPageIndex: this.currentPageIndex,
+                            pages: this.editors.map(page => ({
+                                content: page.content, // Quill Delta object
+                                size: page.size,
+                                orientation: page.orientation
+                            }))
+                        };
+
+                        localStorage.setItem(this.localStorageKey, JSON.stringify(saveData));
+                        this.showFeedback('Notes saved successfully to browser.', 'success');
+
+                     } catch (error) {
+                         console.error("Error saving notes:", error);
+                         this.showFeedback(`Error saving notes: ${error.message}`, 'error');
+                     }
+                }
+
+                loadNotes() {
+                    try {
+                        const savedData = localStorage.getItem(this.localStorageKey);
+                        if (savedData) {
+                            const parsedData = JSON.parse(savedData);
+
+                            // Clear existing editors and DOM elements
+                            this.editors.forEach(page => {
+                                document.getElementById(page.id)?.remove();
+                            });
+                            this.editors = [];
+                            this.pageTabsContainer.innerHTML = '';
+                            this.editorContainer.innerHTML = '';
+                             this.previewContainer.style.display = 'none';
+                             if (this.currentPreviewUrl) {
+                                 URL.revokeObjectURL(this.currentPreviewUrl);
+                                 this.currentPreviewUrl = null;
+                             }
+
+
+                            if (parsedData.pages && Array.isArray(parsedData.pages)) {
+                                 parsedData.pages.forEach(pageData => {
+                                    // Create new pages from loaded data
+                                     // Pass content directly to createNewPage
+                                     this.createNewPage(pageData.content);
+                                     // Set size and orientation AFTER page is created but BEFORE switching
+                                     const newPageIndex = this.editors.length - 1;
+                                     this.editors[newPageIndex].size = pageData.size || 'A4';
+                                     this.editors[newPageIndex].orientation = pageData.orientation || 'portrait';
+                                 });
+
+                                 // Switch to the saved current page
+                                 this.currentPageIndex = parsedData.currentPageIndex || 0;
+                                 if (this.currentPageIndex >= this.editors.length) {
+                                     this.currentPageIndex = 0; // Fallback if index is out of bounds
+                                 }
+                                 this.switchPage(this.currentPageIndex);
+
+                                 this.showFeedback('Notes loaded successfully from browser.', 'success');
+
+                            } else {
+                                 console.warn("Loaded data format is incorrect.", parsedData);
+                                 this.showFeedback('Loaded data format is incorrect. Starting fresh.', 'error');
+                                 // Create a fresh page if data is invalid
+                                 this.createNewPage();
+                            }
+
+
+                        } else {
+                            // No saved data found, this is not an error, just means we start fresh
+                            // showFeedback('No saved notes found.', 'info'); // Optional: give feedback if no save found
+                        }
+                    } catch (error) {
+                        console.error("Error loading notes:", error);
+                        this.showFeedback(`Error loading notes: ${error.message}. Starting fresh.`, 'error');
+                         // Create a fresh page in case of loading error
+                        this.createNewPage();
                     }
                 }
 
-                const pdfBytes = await pdfDoc.save();
-                if (preview) {
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    this.previewContainer.innerHTML = `<iframe src="${url}" width="100%" height="500px"></iframe>`;
-                    this.previewContainer.style.display = 'block';
-                } else {
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = `formatted-notes-${new Date().toISOString().split('T')[0]}.pdf`;
-                    link.click();
+                /* --- Theme Handling --- */
+                applySavedTheme() {
+                     const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light
+                     document.body.setAttribute('data-theme', savedTheme);
+                     this.themeSelect.value = savedTheme;
                 }
-            }
 
-            addSampleNotes() {
-                const sampleContent = `# CSV Files
-- CSV (Comma Separated Values) ek text file hoti hai jisme data commas se alag hota hai.
-- 'csv' module use karke isko handle karte hain.
-Example:
-\`\`\`python
-import csv
-with open("data.csv", "r") as f:
-    reader = csv.reader(f)
-    for row in reader:
-        print(row)
-\`\`\`
-`;
-                this.editors[this.currentPage].editor.setText(sampleContent);
-                this.updateWordCount();
-            }
+                changeTheme(theme) {
+                    document.body.setAttribute('data-theme', theme);
+                     localStorage.setItem('theme', theme); // Save theme preference
+                }
 
-            initEventListeners() {
-                document.getElementById('newPage').addEventListener('click', () => this.createNewPage());
-                document.getElementById('exportPdf').addEventListener('click', () => this.generatePDF(false));
-                document.getElementById('previewPdf').addEventListener('click', () => this.generatePDF(true));
-                document.getElementById('sampleNotes').addEventListener('click', () => this.addSampleNotes());
-                this.themeSelect.addEventListener('change', (e) => {
-                    document.body.setAttribute('data-theme', e.target.value);
-                });
-                document.getElementById('pageSize').addEventListener('change', (e) => {
-                    this.editors[this.currentPage].size = e.target.value.split(',').map(Number);
-                });
-            }
-        }
+                /* --- Sample Notes --- */
+                addSampleNotes() {
+                    const sampleDelta = {
+                    "ops": [
+                        { "attributes": { "header": 1 }, "insert": "CSV Files\n" },
+                        { "attributes": { "list": "bullet" }, "insert": "CSV (Comma Separated Values) ek text file hoti hai jisme data commas se alag hota hai.\n" },
+                        { "attributes": { "list": "bullet" }, "insert": "'csv' module use karke isko handle karte hain.\n" },
+                        { "insert": "Example:\n" },
+                        { "attributes": { "bold": true, "italic": true }, "insert": "Reading a CSV file\n" },
+                         { "insert": "```python\n" },
+                        { "insert": "import csv\n\nwith open(\"data.csv\", \"r\") as f:\n    reader = csv.reader(f)\n    for row in reader:\n        print(row)\n" },
+                         { "insert": "```\n" },
+                         { "insert": "\n" }, // Add extra newline to ensure next content is separate
+                        { "attributes": { "header": 2 }, "insert": "PDF Generation\n" },
+                         { "insert": "Using a library like " },
+                         { "attributes": { "bold": true }, "insert": "pdfmake" },
+                         { "insert": " for client-side PDF creation.\n" },
+                         { "attributes": { "list": "ordered" }, "insert": "Define document structure (content, styles, info).\n" },
+                         { "attributes": { "list": "ordered" }, "insert": "Convert rich text (like Quill Delta) into pdfmake format.\n" },
+                         { "attributes": { "list": "ordered" }, "insert": "Generate and download or preview the PDF.\n" },
+                         { "insert": "\n" },
+                         { "attributes": { "align": "center" }, "insert": "--- End of Sample ---\n" }
+                    ]
+                    };
 
-        const editor = new PDFEditor();
-    </script>
-</body>
-              </html>
+                    // Append sample content to the current page
+                     const quill = this.editors[this.currentPageIndex].quill;
+                    const currentLength = quill.getLength(); // Get current document length
+                     // Ensure there's a newline at the end before inserting if not empty
+                     if (currentLength > 1 && quill.getText(currentLength - 2, 1) !== '\n') {
+                         quill.insertText(currentLength - 1, '\n');
+                     } else if (currentLength === 1 && quill.getText(0, 1) !== '\n') {
+                         // If it's just one character and not a newline, add a newline before inserting
+                          quill.insertText(0, '\n');
+                     } else if (currentLength === 0) {
+                         // If completely empty, Quill might start with a single newline op implicitly,
+                         // but inserting directly might be fine too. Let's just insert.
+                     }
+
+                    quill.setContents(quill.getContents().concat(sampleDelta));
+
+                    this.updateWordCharCount();
+                    this.showFeedback('Sample notes added.', 'success');
+                }
+
+
+                /* --- UI Feedback --- */
+                showFeedback(message, type = 'info', duration = 3000) {
+                    // Clear any ongoing fade out transitions
+                    clearTimeout(this.feedbackTimeout);
+                    this.feedbackElement.style.opacity = 1; // Ensure it's visible when showing a new message
+
+                    this.feedbackElement.textContent = message;
+                    this.feedbackElement.className = `feedback-message ${type}`; // Apply class for styling
+                    this.feedbackElement.classList.remove('hidden'); // Make visible
+
+                    // Hide after duration
+                    this.feedbackTimeout = setTimeout(() => {
+                        this.feedbackElement.style.opacity = 0; // Start fade out
+                        this.feedbackTimeout = setTimeout(() => {
+                             this.feedbackElement.classList.add('hidden'); // Hide completely after fade
+                             this.feedbackElement.style.opacity = 1; // Reset opacity for next time
+                             this.feedbackTimeout = null; // Clear timeout reference
+                        }, 500); // Match CSS transition duration
+                    }, duration);
+                }
+
+
+                /* --- Initialization --- */
+                initEventListeners() {
+                    document.getElementById('newPageBtn').addEventListener('click', () => this.createNewPage());
+                    document.getElementById('exportPdfBtn').addEventListener('click', () => this.generatePDF(false));
+                    document.getElementById('previewPdfBtn').addEventListener('click', () => this.generatePDF(true));
+                    document.getElementById('sampleNotesBtn').addEventListener('click', () => this.addSampleNotes());
+                    document.getElementById('saveBtn').addEventListener('click', () => this.saveNotes());
+                    document.getElementById('loadBtn').addEventListener('click', () => this.loadNotes());
+
+                    this.themeSelect.addEventListener('change', (e) => this.changeTheme(e.target.value));
+
+                    // Update size/orientation in current page's data when dropdowns change
+                    this.pageSizeSelect.addEventListener('change', (e) => {
+                         if (this.editors[this.currentPageIndex]) {
+                             this.editors[this.currentPageIndex].size = e.target.value;
+                             this.showFeedback(`Page size set to ${e.target.options[e.target.selectedIndex].text} for current page. Note: This applies to the whole PDF document, based on the first page's setting.`, 'info', 5000);
+                         }
+                    });
+                     this.orientationSelect.addEventListener('change', (e) => {
+                         if (this.editors[this.currentPageIndex]) {
+                             this.editors[this.currentPageIndex].orientation = e.target.value;
+                              this.showFeedback(`Page orientation set to ${e.target.value} for current page. Note: This applies to the whole PDF document, based on the first page's setting.`, 'info', 5000);
+                         }
+                    });
+
+                    // Handle closing preview
+                     this.previewContainer.addEventListener('click', (e) => {
+                         // Simple click outside iframe hides it
+                         if (e.target === this.previewContainer) {
+                             this.previewContainer.style.display = 'none';
+                             // Optionally revoke URL here too, or rely on window close/navigation
+                         }
+                     });
+                }
+            } // <-- This closes the PDFEditor class
+
+            // Initialize the editor once the DOM is ready
+            document.addEventListener('DOMContentLoaded', () => {
+                 const editor = new PDFEditor();
+            });
+
+        </script>
+    </body>
+</html>
