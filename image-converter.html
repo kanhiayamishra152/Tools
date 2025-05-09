@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Convert Tool - Kanhaiya Mishra</title>
+    <!--
+        Tool Name: Image Convert 2025
+        Author: Kanhaiya Mishra, an AI expert
+        Description: A web-based tool to convert images between different file formats using browser capabilities.
+        Version: 2025
+
+        Virus keyword tags (as requested for tool identification/metadata, NOT related to malware):
+        - virus-scan-status: clean
+        - secure-image-tool
+        - file-conversion-safe
+        - process-image-virus-free
+    -->
+    <style>
+        /* Basic Reset & Body Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the top */
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Container for the Tool */
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .author {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: left;
+            background-color: #fafafa;
+        }
+
+        .section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* File Input Styling (hide default, style label) */
+        input[type="file"] {
+            display: none; /* Hide the default input */
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            font-size: 1em;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #0056b3;
+        }
+
+        #fileName {
+            margin-left: 15px;
+            color: #555;
+            font-style: italic;
+            font-size: 0.9em;
+            word-break: break-all; /* Prevent long file names from overflowing */
+        }
+
+        /* Select Dropdown */
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            font-size: 1em;
+            appearance: none; /* Remove default dropdown arrow */
+            /* Custom arrow using SVG */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px auto;
+            padding-right: 30px; /* Make space for the arrow */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        /* Convert Button */
+        #convertButton {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #convertButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        #convertButton:hover:enabled {
+            background-color: #218838;
+        }
+
+        /* Output Area */
+        .output-section {
+            text-align: center;
+            min-height: 150px; /* Give it some space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #convertedImage {
+            max-width: 100%;
+            max-height: 300px; /* Limit preview height */
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none; /* Hide initially */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        #downloadLink {
+            display: none; /* Hide initially */
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            font-size: 1em;
+        }
+
+        #downloadLink:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            color: #555;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+         /* Loading Indicator */
+        #convertButton.loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .custom-file-upload, #fileName {
+                 display: block;
+                 width: 100%;
+                 margin-left: 0;
+                 margin-top: 10px;
+                 text-align: center;
+            }
+
+            #fileName {
+                 font-size: 0.8em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Image Convert</h1>
+        <p class="author">Tool by Kanhaiya Mishra, an AI expert</p>
+
+        <div class="section input-section">
+            <label for="imageUpload">Upload an Image</label>
+            <input type="file" id="imageUpload" accept="image/*">
+            <label for="imageUpload" class="custom-file-upload">Choose File</label>
+            <span id="fileName">No file chosen</span>
+            <p class="message" id="uploadMessage"></p>
+        </div>
+
+        <div class="section options-section">
+             <label for="outputFormat">Convert To</label>
+            <select id="outputFormat">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/webp">WebP</option>
+                <!-- Note: Conversion to GIF using browser canvas might result in a static image and might not preserve animation/quality -->
+                <!-- <option value="image/gif">GIF (Static)</option> -->
+            </select>
+        </div>
+
+        <button id="convertButton" disabled>Convert Image</button>
+
+        <div class="section output-section">
+             <p class="message" id="outputMessage">Converted image will appear here.</p>
+             <img id="convertedImage" src="#" alt="Converted Image Preview">
+             <a id="downloadLink">Download Image</a>
+        </div>
+    </div>
+
+    <script>
+        // Image Conversion Logic - designed to be secure and virus-free
+        const fileInput = document.getElementById('imageUpload');
+        const fileNameSpan = document.getElementById('fileName');
+        const uploadMessage = document.getElementById('uploadMessage');
+        const outputFormatSelect = document.getElementById('outputFormat');
+        const convertButton = document.getElementById('convertButton');
+        const outputMessage = document.getElementById('outputMessage');
+        const convertedImage = document.getElementById('convertedImage');
+        const downloadLink = document.getElementById('downloadLink');
+
+        let uploadedFile = null;
+
+        // Function to update button state and text
+        function updateButtonState() {
+            const selectedFormat = outputFormatSelect.options[outputFormatSelect.selectedIndex].text;
+            if (uploadedFile) {
+                convertButton.disabled = false;
+                convertButton.textContent = `Convert to ${selectedFormat}`;
+            } else {
+                convertButton.disabled = true;
+                convertButton.textContent = 'Convert Image';
+            }
+        }
+
+        // Listen for file selection
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                uploadedFile = files[0];
+                fileNameSpan.textContent = uploadedFile.name;
+                uploadMessage.textContent = `Selected: ${uploadedFile.name}`;
+
+                // Optional: Display a preview of the uploaded image
+                const reader = new FileReader();
+                 reader.onload = (e) => {
+                    // You could display the original image here if desired
+                    // For now, we'll just clear the converted image area
+                 };
+                 reader.readAsDataURL(uploadedFile); // Reading just to trigger onload if needed later
+
+                outputMessage.textContent = 'Click "Convert" to process.';
+                convertedImage.style.display = 'none'; // Hide previous output
+                convertedImage.src = '#'; // Clear previous image src
+                downloadLink.style.display = 'none'; // Hide previous output
+                downloadLink.href = '#'; // Clear previous download link
+                updateButtonState();
+            } else {
+                uploadedFile = null;
+                fileNameSpan.textContent = 'No file chosen';
+                uploadMessage.textContent = '';
+                outputMessage.textContent = 'Converted image will appear here.';
+                convertedImage.style.display = 'none';
+                convertedImage.src = '#';
+                downloadLink.style.display = 'none';
+                downloadLink.href = '#';
+                updateButtonState();
+            }
+        });
+
+        // Listen for format change to update button text
+        outputFormatSelect.addEventListener('change', updateButtonState);
+
+
+        // Listen for convert button click
+        convertButton.addEventListener('click', () => {
+            if (!uploadedFile) {
+                alert('Please upload an image first.');
+                return;
+            }
+
+            outputMessage.textContent = 'Converting... Please wait.';
+            convertButton.disabled = true;
+            convertButton.classList.add('loading'); // Add loading class
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const img = new Image();
+
+                img.onload = () => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        // Set canvas dimensions to image dimensions
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        // Draw the image onto the canvas
+                        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+                        // Get the target format and quality (quality for lossy formats like JPEG/WebP)
+                        const targetMimeType = outputFormatSelect.value;
+                        let quality = 0.9; // Default quality (0.0 to 1.0)
+
+                        if (targetMimeType === 'image/png') {
+                           // PNG is lossless, quality parameter is ignored or affects compression speed/level, but not visual quality.
+                           quality = 1.0; // Best quality (default compression)
+                        }
+                        // Note: Converting a transparent image (like PNG) to JPEG will typically result in a black or white background.
+                        // Canvas toDataURL supports alpha for PNG and WebP.
+
+                        // Convert canvas to the target format data URL
+                        const dataUrl = canvas.toDataURL(targetMimeType, quality);
+
+                        // Display the converted image preview
+                        convertedImage.src = dataUrl;
+                        convertedImage.style.display = 'block';
+                        outputMessage.textContent = 'Conversion successful!';
+
+                        // Prepare download link
+                        const fileExtension = targetMimeType.split('/')[1]; // e.g., png, jpeg, webp
+                        let originalFileName = uploadedFile.name.split('.').slice(0, -1).join('.') || 'image'; // Get base name without extension
+                        const downloadFileName = `${originalFileName}_converted.${fileExtension}`;
+
+                        downloadLink.href = dataUrl;
+                        downloadLink.download = downloadFileName; // Suggest download filename
+                        downloadLink.style.display = 'inline-block';
+                        downloadLink.textContent = `Download ${fileExtension.toUpperCase()}`;
+
+
+                    } catch (error) {
+                        outputMessage.textContent = `Conversion failed: ${error.message}`;
+                        convertedImage.style.display = 'none';
+                        downloadLink.style.display = 'none';
+                        console.error('Conversion error:', error);
+                    } finally {
+                        convertButton.disabled = false;
+                        convertButton.classList.remove('loading');
+                         updateButtonState(); // Update button text/state after conversion
+                    }
+                };
+
+                img.onerror = (error) => {
+                    outputMessage.textContent = 'Error loading image for conversion.';
+                    convertedImage.style.display = 'none';
+                    downloadLink.style.display = 'none';
+                    console.error('Image loading error:', error);
+                    convertButton.disabled = false;
+                    convertButton.classList.remove('loading');
+                    updateButtonState();
+                };
+
+                // Set image source to trigger loading
+                // This will load the image data read by the FileReader
+                img.src = e.target.result;
+            };
+
+             reader.onerror = (error) => {
+                 outputMessage.textContent = 'Error reading the file.';
+                 convertedImage.style.display = 'none';
+                 downloadLink.style.display = 'none';
+                 console.error('FileReader error:', error);
+                 convertButton.disabled = false;
+                 convertButton.classList.remove('loading');
+                 updateButtonState();
+             };
+
+            // Read the uploaded file as a data URL (Base64 string)
+            // This format is suitable for setting the src of an Image object
+            reader.readAsDataURL(uploadedFile);
+        });
+
+        // Initial state update when the page loads
+        updateButtonState();
+
+    </script>
+
+</body>
+</html>
