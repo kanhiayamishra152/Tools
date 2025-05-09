@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="3D PDF Editor with preview, formatted notes, and multi-theme support for students and professionals.">
-    <meta name="keywords" content="3D PDF editor, formatted notes, file handling, Python notes, PDF preview, multi-theme">
+    <!-- Modified Keywords for 2025 -->
+    <meta name="keywords" content="3D PDF editor, formatted notes, document creation, PDF generation, multi-theme, student tools, professional notes">
     <meta name="robots" content="index, follow">
     <meta name="author" content="xAI">
     <title>3D PDF Editor - Formatted Notes with Preview</title>
@@ -208,7 +209,7 @@
                 <option value="forest">Forest Theme</option>
                 <option value="sunset">Sunset Theme</option>
             </select>
-            <span class="word-count" id="wordCount">Words: 0</span>
+            <span class="word-count" id="wordCount">Words: 0 (Max ~500 words per A4 page)</span>
         </div>
 
         <!-- Removed Ads Container -->
@@ -222,8 +223,6 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script>
-        const { PDFDocument, StandardFonts, rgb } = PDFLib;
-
         class PDFEditor {
             constructor() {
                 this.editors = [];
@@ -234,15 +233,13 @@
                 this.themeSelect = document.getElementById('themeSelect');
                 this.previewContainer = document.getElementById('previewContainer');
                 this.initEventListeners();
-                // Create the first page on load
-                this.createNewPage();
+                this.createNewPage(); // Create the first page on load
             }
 
             createNewPage() {
                 const editorDiv = document.createElement('div');
                 editorDiv.className = 'editor';
-                // Initially hide new editors until they are switched to
-                editorDiv.style.display = 'none';
+                editorDiv.style.display = 'none'; // Hide by default
                 const editorId = `editor-${this.editors.length}`;
                 editorDiv.id = editorId;
                 this.editorContainer.appendChild(editorDiv);
@@ -257,17 +254,16 @@
                             [{ 'align': [] }],
                             [{ 'color': [] }, { 'background': [] }],
                             [{ 'size': ['small', false, 'large', 'huge'] }],
-                            ['link', 'image'], // Image handling in PDF-Lib drawText requires separate implementation, will be skipped in PDF output for simplicity
+                            ['link', 'image'],
                             ['clean']
                         ]
                     }
                 });
 
-                // Store editor instance, current size setting for the page, and content
+                // Store editor instance, current size setting for the page, and content (Delta format)
                 this.editors.push({
                     editor: quill,
                     size: document.getElementById('pageSize').value.split(',').map(Number),
-                    // Store Delta content, not just plain text
                     content: quill.getContents()
                 });
 
@@ -278,7 +274,7 @@
                 });
 
                 this.updatePageTabs();
-                // Switch to the newly created page
+                // Switch to the newly created page or the first page if it's the initial creation
                 this.switchPage(this.editors.length - 1);
             }
 
@@ -308,8 +304,9 @@
                 targetEditorDiv.style.display = 'block';
                 this.editors[index].editor.setContents(this.editors[index].content);
 
-                // Ensure cursor is visible and focused
+                 // Ensure cursor is visible and focused
                 this.editors[index].editor.focus();
+
 
                 this.updatePageTabs();
                 this.updateWordCount();
@@ -323,13 +320,146 @@
                 // Get plain text from the current editor to count words
                 const text = this.editors[this.currentPage].editor.getText().trim();
                 const words = text.split(/\s+/).filter(word => word.length > 0).length;
-                this.wordCountElement.textContent = `Words: ${words}`; // Removed the limit text
+                this.wordCountElement.textContent = `Words: ${words} (Max ~500 words per A4 page)`;
+            }
+
+            // Use the original parseFormattedText method for PDF generation
+            parseFormattedText(text) {
+                const lines = text.split('\n');
+                const formattedLines = [];
+
+                lines.forEach(line => {
+                    let formattedLine = line.trim();
+
+                    if (formattedLine.startsWith('# ')) {
+                        formattedLine = formattedLine.replace('# ', '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 16 });
+                    } else if (formattedLine.startsWith('## ')) {
+                        formattedLine = formattedLine.replace('## ', '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 14 });
+                    } else if (formattedLine.startsWith('- ')) {
+                        formattedLine = formattedLine.replace('- ', '').trim();
+                        formattedLines.push({ text: '• ' + formattedLine, size: 12 });
+                    } else if (formattedLine.includes('**')) {
+                        formattedLine = formattedLine.replace(/\*\*/g, '').trim();
+                        formattedLines.push({ text: formattedLine, bold: true, size: 12 });
+                    } else if (formattedLine.startsWith('"python') || formattedLine.startsWith('```python')) {
+                        // Skip code block start
+                    } else if (formattedLine === '```') {
+                        // Skip code block end
+                    } else if (formattedLine.startsWith('Example:')) {
+                        formattedLines.push({ text: formattedLine, italic: true, size: 12 });
+                    } else if (formattedLine) {
+                        formattedLine = formattedLine.replace(/['"`]/g, ''); // Remove unwanted quotes or backticks
+                        formattedLines.push({ text: formattedLine, size: 12 });
+                    }
+                });
+
+                return formattedLines;
+            }
+
+
+            async generatePDF(preview = false) {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+                const boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+
+                for (const page of this.editors) {
+                    const [width, height] = page.size;
+                    const pdfPage = pdfDoc.addPage([width, height]);
+                    const margin = 50;
+                    let y = height - margin;
+                    const maxWidth = width - (2 * margin);
+
+                    // Use the original text parsing logic for PDF generation
+                    const formattedLines = this.parseFormattedText(page.editor.getText());
+
+                    for (const line of formattedLines) {
+                        if (y <= margin) {
+                             // Simple logic: if no space, stop drawing for this page
+                             // In a real app, this would need more complex page breaking per line/word
+                            console.warn('Ran out of space on page, stopping content draw.');
+                            break; // Stop adding lines to this page
+                        }
+
+                        const words = line.text.split(' ');
+                        let currentLine = '';
+                        const lineHeight = line.size + 4; // Basic line height
+
+                        for (const word of words) {
+                            const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                            const textWidth = (line.bold ? boldFont : font).widthOfTextAtSize(testLine, line.size);
+
+                            if (textWidth > maxWidth && currentLine) {
+                                // Draw the current line if adding the word exceeds maxWidth
+                                pdfPage.drawText(currentLine, {
+                                    x: margin,
+                                    y: y,
+                                    size: line.size,
+                                    font: line.bold ? boldFont : font,
+                                    color: PDFLib.rgb(0, 0, 0)
+                                });
+                                y -= lineHeight; // Move to the next line
+                                currentLine = word; // Start the new line with the current word
+
+                                // Check space after drawing a line
+                                if (y <= margin) {
+                                     console.warn('Ran out of space after line wrap, stopping content draw.');
+                                     break; // Stop adding lines to this page
+                                }
+
+                            } else {
+                                // Otherwise, add the word to the current line
+                                currentLine = testLine;
+                            }
+                        }
+
+                        // Draw the last line segment if any text remains and space is available
+                        if (currentLine && y > margin) {
+                            pdfPage.drawText(currentLine, {
+                                x: margin,
+                                y: y,
+                                size: line.size,
+                                font: line.bold ? boldFont : font,
+                                color: PDFLib.rgb(0, 0, 0)
+                            });
+                            y -= lineHeight; // Move y down after the last line of this formatted segment
+                        }
+                         // Check space after drawing a segment (handles single words or lines too short to wrap)
+                        if (y <= margin) {
+                             console.warn('Ran out of space after drawing line segment, stopping content draw.');
+                             break; // Stop adding lines to this page
+                        }
+                    }
+                     // Add a little extra space at the end of the page content
+                     y -= margin / 2;
+                }
+
+
+                const pdfBytes = await pdfDoc.save();
+                if (preview) {
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    this.previewContainer.innerHTML = `<iframe src="${url}" width="100%" height="500px"></iframe>`;
+                    this.previewContainer.style.display = 'block';
+                     console.log("Preview generated. Displaying in iframe.");
+                } else {
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `formatted-notes-${new Date().toISOString().split('T')[0]}.pdf`;
+                    link.click();
+                    URL.revokeObjectURL(link.href); // Clean up the blob URL
+                     console.log("PDF download initiated.");
+                     // Hide preview if it was showing
+                    this.previewContainer.style.display = 'none';
+                }
             }
 
             addSampleNotes() {
                 const sampleContent = `# CSV Files
-- CSV (Comma Separated Values) is a text file where data is separated by commas.
-- The 'csv' module is used to handle it in Python.
+- CSV (Comma Separated Values) ek text file hoti hai jisme data commas se alag hota hai.
+- 'csv' module use karke isko handle karte hain.
 Example:
 \`\`\`python
 import csv
@@ -338,28 +468,11 @@ with open("data.csv", "r") as f:
     for row in reader:
         print(row)
 \`\`\`
-
-## Reading and Writing
-CSV files can be read row by row or written row by row.
-
-**Reading:** Use \`csv.reader\`.
-**Writing:** Use \`csv.writer\`. Remember to handle newlines (\`newline=''\`).
-
-*Important Consideration:* Encoding! Always specify encoding like \`utf-8\`.
-
-Size mapping in PDF:
-- Small text
-- Normal text (default)
-- Large text
-- Huge text
-
-Different colors:
-- Red text
-- Blue text
-`; // Added more diverse sample content for testing formatting
-
-                const delta = this.editors[this.currentPage].editor.clipboard.convert({ html: sampleContent });
-                this.editors[this.currentPage].editor.setContents(delta);
+`;
+                // Set text using Quill's setText which handles plain text input
+                this.editors[this.currentPage].editor.setText(sampleContent);
+                // setText doesn't trigger text-change, so manually save co
+            this.editors[this.currentPage].content = this.editors[this.currentPage].editor.getContents();
                 this.updateWordCount();
             }
 
@@ -368,84 +481,17 @@ Different colors:
                 document.getElementById('exportPdf').addEventListener('click', () => this.generatePDF(false));
                 document.getElementById('previewPdf').addEventListener('click', () => this.generatePDF(true));
                 document.getElementById('sampleNotes').addEventListener('click', () => this.addSampleNotes());
-
                 this.themeSelect.addEventListener('change', (e) => {
                     document.body.setAttribute('data-theme', e.target.value);
                 });
-
                 document.getElementById('pageSize').addEventListener('change', (e) => {
                     // Update the size for the currently active page
                     this.editors[this.currentPage].size = e.target.value.split(',').map(Number);
-                    // Optional: Could re-render preview or adjust editor appearance if needed, but just saving the size is enough for PDF export
                 });
             }
-            --- START OF FILE text-to-pdf-generator-modified-part4.html ---
-                // PDF saving/previewing logic
-                const pdfBytes = await pdfDoc.save();
-                if (preview) {
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    // Use an iframe to display the PDF preview
-                    this.previewContainer.innerHTML = `<iframe src="${url}" width="100%" height="500px"></iframe>`;
-                    this.previewContainer.style.display = 'block';
-                    console.log("Preview generated. Displaying in iframe.");
-                } else {
-                    // Create a download link for the PDF
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    // Set a default filename based on date
-                    link.download = `formatted-notes-${new Date().toISOString().split('T')[0]}.pdf`;
-                    // Programmatically click the link to trigger the download
-                    link.click();
-                    // Clean up the object URL after download starts (or a short delay)
-                    URL.revokeObjectURL(url);
-                    console.log("PDF download initiated.");
-                     // Hide preview if it was showing
-                    this.previewContainer.style.display = 'none';
-                }
-            }
+        }
 
-            // Helper function placeholders (defined earlier in Part 3 for flow)
-            // getFont(attributes) { ... }
-            // getFontSize(attributes) { ... }
-            // getColor(attributes) { ... }
-            // getTextWidth(text, font, size) { ... }
-            // drawWrappedText(page, text, x, y, maxWidth, font, size, color, lineHeight) { ... }
-
-        } // End of PDFEditor class
-
-
-        // Initialize the editor once the DOM is ready
         const editor = new PDFEditor();
-
-         // Optional: Load theme preference from local storage on page load
-         const savedTheme = localStorage.getItem('theme');
-         if (savedTheme) {
-             document.body.setAttribute('data-theme', savedTheme);
-             document.getElementById('themeSelect').value = savedTheme;
-         }
-         // Save theme preference when changed
-         document.getElementById('themeSelect').addEventListener('change', (e) => {
-             localStorage.setItem('theme', e.target.value);
-         });
-
-         // Optional: Load page size preference from local storage on page load
-         const savedPageSize = localStorage.getItem('pageSize');
-         if (savedPageSize) {
-             document.getElementById('pageSize').value = savedPageSize;
-             // Update the size for the initial page if it exists
-             if(editor.editors.length > 0) {
-                 editor.editors[0].size = savedPageSize.split(',').map(Number);
-             }
-         }
-         // Save page size preference when changed
-         document.getElementById('pageSize').addEventListener('change', (e) => {
-             localStorage.setItem('pageSize', e.target.value);
-         });
-
-
     </script>
 </body>
 </html>
